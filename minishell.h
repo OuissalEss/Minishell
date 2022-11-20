@@ -1,0 +1,48 @@
+#ifndef MINISHELL_H
+# define MINISHELL_H
+# define EOL '\0'
+
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/errno.h>
+
+typedef struct s_env
+{
+	char			*var;
+	char			*value;
+	struct s_env	*next_var;
+}				t_env;
+
+typedef struct s_heredoc
+{
+	char				*dlmt;
+	struct s_heredoc	*next;
+}			t_heredoc;
+
+typedef struct s_cmd
+{
+	char			*cmd_name;
+	char			**arguments;
+	int				infile;
+	int				outfile;
+	t_heredoc		*hdoc;
+	struct s_cmd	*next_cmd;
+}				t_cmd;
+
+typedef struct s_data
+{
+	t_cmd	*commands;
+	t_env	*env;
+	int		exit_status;
+	int		child_process;
+	int		error;
+}				t_data;
+
+t_data	*g_data;
+
+#endif
