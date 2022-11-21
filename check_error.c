@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:38 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:39 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
@@ -47,7 +59,7 @@ int	check_error(char *str)
 		if (error(f, str, i) == -1)
 			return (free_flags(f, -1));
 		if (f->c == 1)
-			set_flags2(f);
+			set_flags2(f, str, i);
 		if (f->hdoc_count > 16)
 			return (max_heredoc(f));
 		i++;

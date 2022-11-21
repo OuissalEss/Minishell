@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:31 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:32 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
@@ -28,7 +40,7 @@ int	add_args2(char *str, int i)
 		j++;
 	}
 	args[j] = NULL;
-	args[j] = remove_quotes(get_name(str, &i));
+	args[j] = get_name(str, &i);
 	args[j + 1] = NULL;
 	free(last->arguments);
 	last->arguments = NULL;
@@ -38,7 +50,8 @@ int	add_args2(char *str, int i)
 
 char	*expand_and_quotes(char	*str)
 {
-	
+	//printf("expand and quotes\n");
+	return (str);
 }
 
 int	add_args(char *str, int i)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   str_functions.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:41 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:42 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
@@ -49,7 +61,7 @@ char	*join_two_str(char *s1, char const *s2, int l1)
 	return (p);
 }
 
-char	*ft_strjoin(char *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		l1;
 	char	*p;
@@ -62,6 +74,8 @@ char	*ft_strjoin(char *s1, char const *s2)
 		return (NULL);
 	free(s1);
 	s1 = NULL;
+	free(s2);
+	s2 = NULL;
 	return (p);
 }
 
@@ -69,8 +83,6 @@ int	skip_whitespace(char *str, int i)
 {
 	while (str[i] && str[i] == ' ')
 		i++;
-	if (str[i] == '\0')
-		i--;
 	return (i);
 }
 
@@ -86,7 +98,8 @@ char	*get_name(char *str, int *j)
 				&& str[i] != '>' ) || quotes(str, i) != 0))
 	{
 		name = ft_charjoin(name, str[i]);
-		i++;
+		if (str[i])
+			i++;
 	}
 	name = ft_charjoin(name, '\0');
 	*j = i;

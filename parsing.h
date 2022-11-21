@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:23 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -12,7 +24,7 @@ typedef struct s_flags
 	int			dlmt;
 	int			hdoc_count;
 	int			id_command;
-	t_heredoc	hdoc;
+	t_heredoc	*hdocs;
 }			t_errflags;
 
 typedef struct s_red
@@ -37,7 +49,7 @@ void	init_data(char **envp);
 int		check_error(char *str);
 int		handle_redirections(char *str, int i);
 void	set_flags(t_errflags *flags, char *s, int i);
-void	set_flags2(t_errflags *flags);
+void	set_flags2(t_errflags *flags, char *s, int i);
 int		free_flags(t_errflags *f, int r);
 void	start_parsing(char *str);
 void	cmd_add_back(t_cmd *new);
@@ -47,7 +59,7 @@ int		add_heredoc(char *str, int i);
 void	add_cmd(void);
 char	*ft_charjoin(char *str, char x);
 char	*join_two_str(char *s1, char const *s2, int l1);
-char	*ft_strjoin(char *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 int		skip_whitespace(char *str, int i);
 char	*get_name(char *str, int *j);
 int		add_infile(char *str, int i);

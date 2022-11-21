@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:48 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:49 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
@@ -59,7 +71,7 @@ char	*expand_dollar(char *str)
 		{
 			var_name = get_varname(str, i + 1);
 			var = get_varvalue(var_name);
-			new = ft_strjoin(new, var);
+			new = ft_strjoin(new, strdup(var));
 			i += strlen(var_name);
 			free(var_name);
 			var_name = NULL;

@@ -1,14 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_flags.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:58 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:59 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
-void	add_hdoc_err(t_errflags f, char *s, int i)
+void	add_hdoc_err(t_errflags *f, char *s, int i)
 {
 	t_heredoc	*new;
+	t_heredoc	*l;
 
 	new = malloc(sizeof(t_heredoc));
-	new->dlmt = get_name(s, &i);
+	new->dlmt = remove_quotes(get_name(s, &i));
 	new->next = NULL;
-
+	l = f->hdocs;
+	if (l)
+	{
+		while (l->next)
+			l = l->next;
+		l->next = new;
+	}
+	else
+		f->hdocs = new;
 }
 
 void	set_flags(t_errflags *flags, char *s, int i)
@@ -33,19 +54,19 @@ void	set_flags(t_errflags *flags, char *s, int i)
 	{
 		flags->in = 0;
 		flags->hdoc = 1;
-		add_hdoc_err(flags, s, i + 1);
 	}
 	else if (s[i] != ' ')
 			flags->c = 1;
 }
 
-void	set_flags2(t_errflags *flags)
+void	set_flags2(t_errflags *flags, char *s, int i)
 {
 	if (flags->hdoc == 1)
 	{
 		flags->dlmt = 1;
 		flags->hdoc = 0;
 		flags->hdoc_count++;
+		add_hdoc_err(flags, s, i + 1);
 	}
 	flags->c = 0;
 	flags->pipe = 0;
@@ -55,16 +76,38 @@ void	set_flags2(t_errflags *flags)
 	flags->hdoc = 0;
 }
 
+void	open_hdocs(t_errflags *f)
+{
+	(void)f;
+	printf("open here-doc\n");
+}
+
 int	free_flags(t_errflags *f, int r)
 {
+	t_heredoc	*hd;
+
+	hd = f->hdocs;
+	if (r == -1)
+		printf("Error\n");
+	if (f->hdocs)
+	{
+		if (r != 2)
+			open_hdocs(f);
+		printf("hhhhhh\n");
+		while (hd)
+		{
+			f->hdocs = f->hdocs->next;
+			free(hd->dlmt);
+			hd->dlmt = NULL;
+			free(hd);
+			hd = NULL;
+			hd = f->hdocs;
+		}
+	}
 	free(f);
 	f = NULL;
 	if (r == -2)
 		return (-1);
-	if (r == -1)
-		printf("Error\n");
-	if (f->id_command > 0)
-		open_hdocs(f);
 	return (r);
 }
 
@@ -82,6 +125,6 @@ void	init_flags(t_errflags **f)
 	flags->dlmt = 0;
 	flags->hdoc_count = 0;
 	flags->id_command = 0;
-	flags->hdoc = NULL;
+	flags->hdocs = NULL;
 	*f = flags;
 }

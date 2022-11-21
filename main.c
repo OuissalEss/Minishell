@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/21 10:48:56 by oessamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parsing.h"
 
@@ -20,14 +32,39 @@ int	exist(char *str)
 
 void	free_data(void)
 {
-	t_cmd	*cmd;
+	int			i;
+	t_cmd		*cmd;
+	t_heredoc	*hd;
 
 	cmd = g_data->commands;
 	while (cmd)
 	{
 		g_data->commands = g_data->commands->next_cmd;
 		free(cmd->cmd_name);
+		cmd->cmd_name = NULL;
+		i = 0;
+		while (cmd->arguments && cmd->arguments[i])
+		{
+			free(cmd->arguments[i]);
+			cmd->arguments[i] = NULL;
+			i++;
+		}
 		free(cmd->arguments);
+		cmd->arguments = NULL;
+		hd = cmd->hdoc;
+		while (hd)
+		{
+			cmd->hdoc = cmd->hdoc->next;
+			free(hd->dlmt);
+			hd->dlmt = NULL;
+			free(hd);
+			hd = NULL;
+			hd = cmd->hdoc;
+		}
+		free(cmd->arguments);
+		cmd->arguments = NULL;
+		free(cmd);
+		cmd = NULL;
 		cmd = g_data->commands;
 	}
 	g_data->commands = NULL;
@@ -44,7 +81,7 @@ void	print(void)
 	{
 		printf("cmd = %s\n", lst->cmd_name);
 		i = 0;
-		while (lst->arguments[i])
+		while (lst->arguments && lst->arguments[i])
 		{
 			printf("args[%d] = %s     ", i, lst->arguments[i]);
 			i++;
@@ -75,9 +112,12 @@ int	main(int argc, char **argv, char **envp)
 		if (exist(str) == 1 && check_error(str) == 1)
 		{
 			start_parsing(str);
+			printf("Rah ma segfaultach akhtssi lykhlik\n");
 			print();
 			free_data();
 		}
+		free(str);
+		str = NULL;
 	}
 	return (0);
 }
