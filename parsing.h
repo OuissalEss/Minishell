@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:23 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/22 17:23:22 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,19 @@ typedef struct s_flags
 	int			hdoc_count;
 	int			id_command;
 	t_heredoc	*hdocs;
-}			t_errflags;
+}				 t_errflags;
 
 typedef struct s_red
 {
 	int				cmd_id;
 	char			*file_name;
 	struct s_red	*next;
-}		t_red;
+}				t_red;
 
 typedef struct s_parsing
 {
-	t_red	*red;
-	int		id_command;
-}			t_parsing;
+	int	flag;
+}				t_parsing;
 
 int		ft_isalnum(int c);
 void	*ft_calloc(size_t count, size_t size);
@@ -51,7 +50,7 @@ int		handle_redirections(char *str, int i);
 void	set_flags(t_errflags *flags, char *s, int i);
 void	set_flags2(t_errflags *flags, char *s, int i);
 int		free_flags(t_errflags *f, int r);
-void	start_parsing(char *str);
+int		start_parsing(char *str);
 void	cmd_add_back(t_cmd *new);
 t_cmd	*get_last(t_cmd *lst);
 void	hdoc_add_back(t_heredoc **lst, t_heredoc *new);
@@ -67,5 +66,11 @@ int		add_outfile(char *str, int i);
 int		add_append(char *str, int i);
 int		handle_redirections(char *str, int i);
 void	init_flags(t_errflags **f);
+char	*get_varvalue(char *var_name);
+char	*get_varname(char *str, int i);
+void	open_hdocs(t_errflags *f);
+char	*expand_dollar(char *str);
+char	*ft_itoa(int n);
+void	rm_quotes(void);
 
 #endif

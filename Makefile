@@ -6,14 +6,14 @@
 #    By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 10:48:35 by oessamdi          #+#    #+#              #
-#    Updated: 2022/11/21 10:48:36 by oessamdi         ###   ########.fr        #
+#    Updated: 2022/11/22 15:43:38 by oessamdi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRC = main.c init_data.c check_error.c parsing.c error_flags.c lst_functions.c \
-	quotes_functions.c redirections.c str_functions.c
+	quotes_functions.c redirections.c str_functions.c expand.c str_utils.c rm_quotes.c
 
 CC = @gcc 
 
@@ -26,7 +26,7 @@ OBJC = $(SRC:.c=.o)
 RM = @rm -f
 
 $(NAME) : $(OBJC)
-			$(CC) $(CFLAGS)  -lreadline $(OBJC) -o $(NAME)
+			$(CC) $(CFLAGS) $(DEBUG) -lreadline $(OBJC) -o $(NAME)
 			@echo "MINISHELL CREATED!"
 
 all : $(NAME)

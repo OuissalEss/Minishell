@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:58 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:59 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/22 15:10:02 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,6 @@ void	set_flags2(t_errflags *flags, char *s, int i)
 	flags->hdoc = 0;
 }
 
-void	open_hdocs(t_errflags *f)
-{
-	(void)f;
-	printf("open here-doc\n");
-}
-
 int	free_flags(t_errflags *f, int r)
 {
 	t_heredoc	*hd;
@@ -91,9 +85,10 @@ int	free_flags(t_errflags *f, int r)
 		printf("Error\n");
 	if (f->hdocs)
 	{
-		if (r != 2)
+		if (r != -2)
 			open_hdocs(f);
-		printf("hhhhhh\n");
+		// if (hd)
+		// 	free_h
 		while (hd)
 		{
 			f->hdocs = f->hdocs->next;

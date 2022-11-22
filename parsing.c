@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:31 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:32 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/22 17:43:08 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ int	add_args2(char *str, int i)
 	return (i);
 }
 
-char	*expand_and_quotes(char	*str)
-{
-	//printf("expand and quotes\n");
-	return (str);
-}
-
 int	add_args(char *str, int i)
 {
 	t_cmd	*last;
@@ -76,18 +70,19 @@ int	add_args(char *str, int i)
 	}
 	else
 		i = add_args2(str, i);
-	last->cmd_name = expand_and_quotes(last->cmd_name);
-	last->arguments[0] = expand_and_quotes(last->arguments[0]);
 	i--;
 	return (i);
 }
 
-void	start_parsing(char *str)
+int	start_parsing(char *str)
 {
-	int			i;
+	int		i;
 
 	i = 0;
 	add_cmd();
+	str = expand_dollar(str);
+	printf("str = .%s.\n", str);
+	//rm_q(&s);
 	while (str[i])
 	{
 		i = skip_whitespace(str, i);
@@ -99,4 +94,6 @@ void	start_parsing(char *str)
 			i = add_args(str, i);
 		i++;
 	}
+	rm_quotes();
+	return (1);
 }

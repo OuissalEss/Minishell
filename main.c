@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:56 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/22 18:10:25 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	free_data(void)
 	while (cmd)
 	{
 		g_data->commands = g_data->commands->next_cmd;
+		// close infile and outfile
 		free(cmd->cmd_name);
 		cmd->cmd_name = NULL;
 		i = 0;
@@ -76,6 +77,7 @@ void	print(void)
 	t_cmd		*lst;
 	t_heredoc	*hlst;
 
+	printf("HELLOLLLL\n");
 	lst = g_data->commands;
 	while (lst)
 	{
@@ -94,7 +96,7 @@ void	print(void)
 			printf("hdoc = %s      ", hlst->dlmt);
 			hlst = hlst->next;
 		}
-		printf("\n ");
+		printf("\n");
 		lst = lst->next_cmd;
 	}
 }
@@ -106,17 +108,29 @@ int	main(int argc, char **argv, char **envp)
 	(void) argc;
 	(void) argv;
 	init_data(envp);
+	// t_env *tmp = g_data->env;
+	// while (tmp)
+	// {
+	// 	printf("%s=%s.\n", tmp->var, tmp->value);
+	// 	tmp = tmp->next_var;
+	// }
 	while (1)
 	{
 		str = readline("my prompt : ");
+		add_history(str);
 		if (exist(str) == 1 && check_error(str) == 1)
 		{
-			start_parsing(str);
-			printf("Rah ma segfaultach akhtssi lykhlik\n");
-			print();
-			free_data();
+			if (start_parsing(str) == 1)
+			{
+				printf("Rah ma segfaultach\n");
+				str = expand_dollar(str);
+				printf("str = %s.\n", str);
+				print();
+				free_data();
+			}
 		}
-		free(str);
+		if (str)
+			free(str);
 		str = NULL;
 	}
 	return (0);

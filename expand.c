@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:48 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:49 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/22 17:11:16 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,20 @@ char	*get_varvalue(char *var_name)
 	j = 0;
 	value = NULL;
 	envp = g_data->env;
-	if (!envp)
+	if (!envp || var_name[0] == '\0')
 		return (ft_charjoin(value, '\0'));
 	while (envp)
 	{
-		if (envp->var == var_name)
+		if (strcmp(envp->var, var_name) == 0)
 		{
 			value = envp->value;
-			break;
+			break ;
 		}
 		envp = envp->next_var;
 	}
-	if (!value)
+	if (value == NULL)
 		return (ft_charjoin(value, '\0'));
-	return (occurence);
+	return (value);
 }
 
 char	*expand_dollar(char *str)
@@ -60,7 +60,6 @@ char	*expand_dollar(char *str)
 	int		i;
 	char	*new;
 	char	*var_name;
-	char	*var;
 
 	i = 0;
 	new = NULL;
@@ -69,9 +68,10 @@ char	*expand_dollar(char *str)
 	{
 		if (str[i] == '$' && quotes(str, i) != 1)
 		{
+			if (str[i + 1] == '?')
+				new = ft_strjoin(new, ft_itoa(g_data->exit_status));
 			var_name = get_varname(str, i + 1);
-			var = get_varvalue(var_name);
-			new = ft_strjoin(new, strdup(var));
+			new = ft_strjoin(new, strdup(get_varvalue(var_name)));
 			i += strlen(var_name);
 			free(var_name);
 			var_name = NULL;
@@ -80,4 +80,5 @@ char	*expand_dollar(char *str)
 			new = ft_charjoin(new, str[i]);
 		i++;
 	}
+	return (new);
 }
