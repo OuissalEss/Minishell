@@ -6,18 +6,21 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/22 18:10:25 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/24 13:19:57 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing.h"
 
-int	exist(char *str)
+int	exist(char **s)
 {
-	int	i;
+	int		i;
+	int		r;
+	char	*str;
 
 	i = 0;
+	str = expand_dollar(*s);
 	if (str == NULL)
 	{
 		g_data->exit_status = 0;
@@ -25,9 +28,12 @@ int	exist(char *str)
 	}
 	while (str[i] && str[i] == ' ')
 		i++;
+	r = 1;
 	if (str[i] == '\0')
-		return (-1);
-	return (1);
+		r = -1;
+	free(str);
+	str = NULL;
+	return (r);
 }
 
 void	free_data(void)
@@ -101,6 +107,16 @@ void	print(void)
 	}
 }
 
+void	env(void)
+{
+	t_env *tmp = g_data->env;
+	while (tmp)
+	{
+		printf("%s=%s\n", tmp->var, tmp->value);
+		tmp = tmp->next_var;
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
@@ -108,26 +124,17 @@ int	main(int argc, char **argv, char **envp)
 	(void) argc;
 	(void) argv;
 	init_data(envp);
-	// t_env *tmp = g_data->env;
-	// while (tmp)
-	// {
-	// 	printf("%s=%s.\n", tmp->var, tmp->value);
-	// 	tmp = tmp->next_var;
-	// }
 	while (1)
 	{
 		str = readline("my prompt : ");
 		add_history(str);
-		if (exist(str) == 1 && check_error(str) == 1)
+		if (exist(&str) == 1 && check_error(str) == 1)
 		{
-			if (start_parsing(str) == 1)
-			{
-				printf("Rah ma segfaultach\n");
-				str = expand_dollar(str);
-				printf("str = %s.\n", str);
-				print();
-				free_data();
-			}
+			start_parsing(str);
+			printf("Rah ma segfaultach\n");
+			printf("str = %s.\n", str);
+			print();
+			free_data();
 		}
 		if (str)
 			free(str);

@@ -5,55 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/21 10:48:48 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/22 17:11:16 by oessamdi         ###   ########.fr       */
+/*   Created: 2022/11/25 18:36:09 by oessamdi          #+#    #+#             */
+/*   Updated: 2022/11/25 18:36:48 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing.h"
-
-char	*get_varname(char *str, int i)
-{
-	int		i1;
-	int		j;
-	char	*var_name;
-
-	i1 = i;
-	while (str[i] && ft_isalnum(str[i]) != 0)
-		i++;
-	var_name = malloc(sizeof(char) * (i - i1 + 1));
-	j = 0;
-	while (str[i1] && ft_isalnum(str[i1]) != 0)
-		var_name[j++] = str[i1++];
-	var_name[j] = '\0';
-	return (var_name);
-}
-
-char	*get_varvalue(char *var_name)
-{
-	int		j;
-	char	*value;
-	t_env	*envp;
-
-	j = 0;
-	value = NULL;
-	envp = g_data->env;
-	if (!envp || var_name[0] == '\0')
-		return (ft_charjoin(value, '\0'));
-	while (envp)
-	{
-		if (strcmp(envp->var, var_name) == 0)
-		{
-			value = envp->value;
-			break ;
-		}
-		envp = envp->next_var;
-	}
-	if (value == NULL)
-		return (ft_charjoin(value, '\0'));
-	return (value);
-}
 
 char	*expand_dollar(char *str)
 {

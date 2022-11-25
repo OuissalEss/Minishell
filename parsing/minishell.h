@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:04 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:09 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/25 14:45:23 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_env
 typedef struct s_heredoc
 {
 	char				*dlmt;
+	int					fd[2];
 	struct s_heredoc	*next;
 }			t_heredoc;
 

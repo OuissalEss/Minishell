@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:41 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:48:42 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/25 17:46:38 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		l1;
 	char	*p;
 
-	if (!s1 || !s2)
-		return (NULL);
+	if (!s1)
+		s1 = ft_charjoin(s1, '\0');
+	if (!s2)
+		s2 = ft_charjoin(s2, '\0');
 	l1 = strlen(s1);
 	p = join_two_str(s1, s2, l1);
 	if (p == NULL)

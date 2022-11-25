@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/22 17:23:22 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/25 16:45:36 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,21 @@ typedef struct s_flags
 	int			hdoc_count;
 	int			id_command;
 	t_heredoc	*hdocs;
-}				 t_errflags;
+}				t_errflags;
 
 typedef struct s_red
 {
-	int				cmd_id;
 	char			*file_name;
+	int				fd[2];
+	int				type;
 	struct s_red	*next;
 }				t_red;
 
-typedef struct s_parsing
+typedef struct s_args
 {
-	int	flag;
-}				t_parsing;
+	char			*str;
+	struct s_args	*next;
+}				t_args;
 
 int		ft_isalnum(int c);
 void	*ft_calloc(size_t count, size_t size);
@@ -50,7 +52,7 @@ int		handle_redirections(char *str, int i);
 void	set_flags(t_errflags *flags, char *s, int i);
 void	set_flags2(t_errflags *flags, char *s, int i);
 int		free_flags(t_errflags *f, int r);
-int		start_parsing(char *str);
+void	start_parsing(char *str);
 void	cmd_add_back(t_cmd *new);
 t_cmd	*get_last(t_cmd *lst);
 void	hdoc_add_back(t_heredoc **lst, t_heredoc *new);

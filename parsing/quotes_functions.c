@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:49:05 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/21 10:49:06 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/24 16:43:15 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*remove_quotes(char *str)
 		if (!(str[i] == '\"' && quotes(str, i) != 1)
 			&& !(str[i] == '\'' && quotes(str, i) != 2))
 			new_str[j++] = str[i];
+			//new_arr[j] = arr[i];
 		i++;
 	}
 	new_str[j] = '\0';
