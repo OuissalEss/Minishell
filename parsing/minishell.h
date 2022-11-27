@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:04 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/25 14:45:23 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/27 13:43:23 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ typedef struct s_heredoc
 	struct s_heredoc	*next;
 }			t_heredoc;
 
+typedef struct s_red
+{
+	char			*file_name;
+	int				fd[2];
+	int				type;
+	struct s_red	*next;
+}				t_red;
+
 typedef struct s_cmd
 {
 	char			*cmd_name;
@@ -44,6 +52,7 @@ typedef struct s_cmd
 	int				infile;
 	int				outfile;
 	t_heredoc		*hdoc;
+	t_red			*red;
 	struct s_cmd	*next_cmd;
 }				t_cmd;
 

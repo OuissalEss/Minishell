@@ -1,17 +1,190 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/25 10:55:36 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/27 17:53:05 by oessamdi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "parsing/minishell.h"
 
-#include "parsing.h"
-#include "minishell.h"
+static int	ft_intlen(long nb)
+{
+	int	i;
+
+	i = 1;
+	if (nb < 0)
+	{
+		nb = -nb;
+		i++;
+	}
+	while (nb > 9)
+	{
+		nb /= 10;
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	int			i;
+	long		nb;
+	char		*str;
+
+	nb = n;
+	i = ft_intlen(nb);
+	str = (char *)malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
+	str[i] = '\0';
+	if (n < 0)
+	{
+		nb = -nb;
+	}
+	while (i > 0)
+	{
+		str[--i] = (nb % 10) + '0';
+		nb /= 10;
+	}
+	if (n < 0)
+		str[0] = '-';
+	return (str);
+}
+
+char	*join_two_str(char *s1, char const *s2, int l1)
+{
+	int		i;
+	char	*p;
+
+	p = malloc(sizeof(char *) * (l1 + strlen(s2)));
+	if (p == NULL)
+		return (NULL);
+	i = 0;
+	while (s1[i] != EOL)
+	{
+		p[i] = s1[i];
+		i++;
+	}
+	i = 0;
+	while (s2[i] != EOL)
+	{
+		p[i + l1] = s2[i];
+		i++;
+	}
+	p[i + l1] = EOL;
+	return (p);
+}
+
+char	*ft_charjoin(char *str, char x)
+{
+	int		i;
+	int		len;
+	char	*new;
+
+	len = 0;
+	i = 0;
+	if (str != NULL)
+		len = strlen(str);
+	new = malloc(sizeof(char) * (len + 2));
+	while (str && str[i])
+	{
+		new[i] = str[i];
+		i++;
+	}
+	new[i] = x;
+	new[i + 1] = '\0';
+	if (str != NULL)
+		free(str);
+	str = NULL;
+	return (new);
+}
+
+int	ft_isalnum(int c)
+{
+	if ((c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z')
+		|| (c >= '0' && c <= '9'))
+		return (1);
+	return (0);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		l1;
+	char	*p;
+
+	if (!s1)
+		s1 = ft_charjoin(s1, '\0');
+	if (!s2)
+		s2 = ft_charjoin(s2, '\0');
+	l1 = strlen(s1);
+	p = join_two_str(s1, s2, l1);
+	if (p == NULL)
+		return (NULL);
+	free(s1);
+	s1 = NULL;
+	free(s2);
+	s2 = NULL;
+	return (p);
+}
+
+char	*get_varname(char *str, int i)
+{
+	int		i1;
+	int		j;
+	char	*var_name;
+
+	i1 = i;
+	while (str[i] && ft_isalnum(str[i]) != 0)
+		i++;
+	var_name = malloc(sizeof(char) * (i - i1 + 1));
+	j = 0;
+	while (str[i1] && ft_isalnum(str[i1]) != 0)
+		var_name[j++] = str[i1++];
+	var_name[j] = '\0';
+	return (var_name);
+}
+
+char	*get_varvalue(char *var_name)
+{
+	int		j;
+	char	*value;
+	t_env	*envp;
+
+	j = 0;
+	value = NULL;
+	envp = g_data->env;
+	if (!envp || var_name[0] == '\0')
+		return (ft_charjoin(value, '\0'));
+	while (envp)
+	{
+		if (strcmp(envp->var, var_name) == 0)
+		{
+			value = envp->value;
+			break ;
+		}
+		envp = envp->next_var;
+	}
+	if (value == NULL)
+		return (ft_charjoin(value, '\0'));
+	return (value);
+}
+
+int	expand(char *str, int *arr, char **new)
+{
+	int		i;
+	char	*var_name;
+	char	*var_value;
+
+	var_name = get_varname(str, 1);
+	var_name = get_varvalue(var_name);
+	i = 0;
+	while (str[i])
+	{
+		new[0] = ft_charjoin(new[0], str[i]);
+		i++;
+	}
+	free(var_name);
+	var_name = NULL;
+	return (i);
+}
+
+
+
+
 
 void	set_arr(char *str, int **array)
 {
@@ -162,16 +335,16 @@ char	*handle_expansion(char **str, int **arr)
 	{
 		if (str[0][i] == '$' && arr[0][i] == 0)
 		{
-			if (str[i + 1] == '?')
+			if (str[0][i + 1] == '?')
 			{
 				new = ft_strjoin(new, ft_itoa(g_data->exit_status));
 				i += 2;
 			}
-			else if (ft_isalnum(str[i + 1]) == 1)
-				i += expand(&str[0][i], &arr[0][i]);
+			else if (ft_isalnum(str[0][i + 1]) == 1)
+				i += expand(&str[0][i], &arr[0][i], &new);
 		}
 		else
-			new = ft_charjoin(new, str[i]);
+			new = ft_charjoin(new, str[0][i]);
 		i++;
 	}
 	new = ft_charjoin(new, '\0');
@@ -244,29 +417,52 @@ char	**split_cmds(char *str, int **arr)
 	return (cmds);
 }
 
-void	start_parsing(char *str)
-{
-	int		*arr;
-	int		i;
-	char	**cmds;
-	char	*tmp;
 
-	arr = NULL;
-	set_arr(str, &arr);
-	cmds = split_cmds(str, arr);
-	i = 0;
-	while (cmds[i])
+int     main(void) {
+    int *arr;
+    char *str;
+    int  i;
+	char **cmds;
+	t_red	*r = NULL;
+
+	while (1)
 	{
-		add_cmd();
-		set_arr(cmds[i], &arr);
-		handle_redirection(&cmds[i], &arr, get_last(g_data->commands)->red);
-		handle_quotes(&cmds[i], &arr);
-		tmp = handle_expansion(&cmds[i], &arr);
-		free(cmds[i]);
-		cmds[i] = NULL;
-		cmds[i] = tmp;
-		set_commands();
-		i++;
+		i = 0;
+		str = readline(">");
+		arr = (int *)malloc(sizeof(int) *1024);
+		set_arr(str, &arr);
+		cmds = split_cmds(str, &arr);
+		i = 0;
+		while (cmds[i]) {
+			// printf("%s\n", cmds[i++]);
+			set_arr(str, &arr);
+			handle_redirection(&cmds[i], &arr, r);
+			handle_quotes(&cmds[i], &arr);
+			handle_expansion(&cmds[i], &arr);
+			printf("%s\n", cmds[i]);
+		}
+		// printf("%s\n", str);
+		// while (str[i]) {
+		// 	printf("%d ", arr[i]);
+		// 	i++;
+		// }
+		// printf("\n");
+		
+		// printf("%s\n", str);
+		// i = 0;
+		// while (str[i]) {
+		// 	printf("%d ", arr[i]);
+		// 	i++;
+		// }
+		// printf("\n");
+
+		// printf("%s\n", str);
+		// i = 0;
+		// while (str[i]) {
+		// 	printf("%d ", arr[i]);
+		// 	i++;
+		// }
+		// printf("\n");
 	}
-	open_red();
+    return (0);
 }

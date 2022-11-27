@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/25 16:45:36 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/27 13:43:28 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ typedef struct s_flags
 	int			id_command;
 	t_heredoc	*hdocs;
 }				t_errflags;
-
-typedef struct s_red
-{
-	char			*file_name;
-	int				fd[2];
-	int				type;
-	struct s_red	*next;
-}				t_red;
 
 typedef struct s_args
 {
