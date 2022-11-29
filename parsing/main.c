@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/24 13:19:57 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/29 07:24:44 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void	free_data(void)
 	while (cmd)
 	{
 		g_data->commands = g_data->commands->next_cmd;
-		// close infile and outfile
+		if (cmd->infile != 0)
+			close(cmd->infile);
+		if (cmd->outfile != 1)
+			close(cmd->outfile);
 		free(cmd->cmd_name);
 		cmd->cmd_name = NULL;
 		i = 0;
@@ -109,7 +112,9 @@ void	print(void)
 
 void	env(void)
 {
-	t_env *tmp = g_data->env;
+	t_env *tmp;
+
+	tmp = g_data->env;
 	while (tmp)
 	{
 		printf("%s=%s\n", tmp->var, tmp->value);

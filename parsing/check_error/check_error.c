@@ -6,12 +6,12 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:38 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/24 14:21:51 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/29 09:00:44 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "parsing.h"
+#include "check_error.h"
 
 int	skip_white_spaces(char *str, int i, t_errflags *flags)
 {

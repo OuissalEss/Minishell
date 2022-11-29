@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:04 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/27 13:43:23 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/11/29 05:04:07 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_red
 	char			*file_name;
 	int				fd[2];
 	int				type;
+	int				expand;
 	struct s_red	*next;
 }				t_red;
 
