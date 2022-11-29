@@ -163,24 +163,6 @@ char	*get_varvalue(char *var_name)
 	return (value);
 }
 
-int	expand(char *str, int *arr, char **new)
-{
-	int		i;
-	char	*var_name;
-	char	*var_value;
-
-	var_name = get_varname(str, 1);
-	var_name = get_varvalue(var_name);
-	i = 0;
-	while (str[i])
-	{
-		new[0] = ft_charjoin(new[0], str[i]);
-		i++;
-	}
-	free(var_name);
-	var_name = NULL;
-	return (i);
-}
 
 
 
@@ -254,7 +236,7 @@ int	add_red(t_red **r, int t, char *str, int *arr)
 	return (i);
 }
 
-void	handle_redirection(char **str, int **arr, t_red	*red)
+t_red	*handle_redirection(char **str, int **arr, t_red *red)
 {
 	int		i;
 	int		j;
@@ -280,19 +262,20 @@ void	handle_redirection(char **str, int **arr, t_red	*red)
 		i++;
 	}
 	str[0][j] = '\0';
+	return (red);
 }
 
 void	init_var(int *j, char **str, int **arr)
 {
 	int	j1;
 
-	j1 = *j;
 	j1 = 0;
 	if (arr[0][0] == 0)
 	{
 		str[0][0] = str[0][0];
 		j1 = 1;
 	}
+	*j = j1;
 }
 
 void	handle_quotes(char **str, int **arr)
@@ -322,34 +305,30 @@ void	handle_quotes(char **str, int **arr)
 	arr[0] = new;
 }
 
-char	*handle_expansion(char **str, int **arr)
+int	expand(char *str, int *arr, char **new)
 {
 	int		i;
-	char	*new;
+	char	*n;
 	char	*var_name;
 	char	*var_value;
 
+	var_name = get_varname(str, 1);
+	var_value = get_varvalue(var_name);
+	n = *new;
 	i = 0;
-	new = NULL;
-	while (str[0][i])
+	while (var_value[i])
 	{
-		if (str[0][i] == '$' && arr[0][i] == 0)
-		{
-			if (str[0][i + 1] == '?')
-			{
-				new = ft_strjoin(new, ft_itoa(g_data->exit_status));
-				i += 2;
-			}
-			else if (ft_isalnum(str[0][i + 1]) == 1)
-				i += expand(&str[0][i], &arr[0][i], &new);
-		}
-		else
-			new = ft_charjoin(new, str[0][i]);
+		n = ft_charjoin(n, var_value[i]);
 		i++;
 	}
-	new = ft_charjoin(new, '\0');
-	return (new);
+	*new = n;
+	i = strlen(var_name);
+	free(var_name);
+	var_name = NULL;
+	return (i);
 }
+
+
 
 void	*ft_memset(void *b, int c, size_t len)
 {
@@ -366,18 +345,18 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-void	*ft_calloc(size_t size)
+void	*ft_calloc(size_t size, size_t count)
 {
 	void	*x;
 
-	x = malloc(size);
+	x = malloc(size * count);
 	if (!x)
 		return (NULL);
-	ft_memset(x, 0, size);
+	ft_memset(x, 0, size * count);
 	return (x);
 }
 
-int	get_count(char *str, int **arr )
+int	get_count(char *str, int **arr)
 {
 	int		i;
 	int		c;
@@ -400,7 +379,10 @@ char	**split_cmds(char *str, int **arr)
 	char	**cmds;
 
 	c = get_count(str, arr);
-	cmds = ft_calloc(sizeof(char *) * (c + 1));
+	cmds = malloc(sizeof(char *)*(c + 1));
+	i = 0;
+	while (i < c + 1)
+		cmds[i++] = NULL;
 	i = 0;
 	c = 0;
 	while (str[i])
@@ -408,23 +390,193 @@ char	**split_cmds(char *str, int **arr)
 		if (str[i] == '|' && arr[0][i] == 0)
 			c++;
 		else
-		{
 			cmds[c] = ft_charjoin(cmds[c], str[i]);
 			i++;
-		}
 	}
 	cmds[c + 1] = NULL;
 	return (cmds);
 }
 
 
-int     main(void) {
+
+
+
+
+void	ft_lstadd_back(t_env **lst, t_env *new)
+{
+	t_env	*l;
+
+	l = *lst;
+	if (l)
+	{
+		while (l->next_var)
+			l = l->next_var;
+		l->next_var = new;
+	}
+	else
+		*lst = new;
+}
+
+char	*get_var(char *str)
+{
+	int		i;
+	char	*var;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	var = malloc(sizeof(char) * i + 1);
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		var[i] = str[i];
+		i++;
+	}
+	var[i] = '\0';
+	return (var);
+}
+
+char	*get_value(char *str)
+{
+	int		start;
+	int		i;
+	char	*value;
+
+	start = 0;
+	while (str[start] && str[start] != '=')
+		start++;
+	start++;
+	value = malloc(sizeof(char) * strlen(&str[start]) + 1);
+	i = 0;
+	while (str[start])
+		value[i++] = str[start++];
+	value[i] = '\0';
+	return (value);
+}
+
+void	set_env(char **envp)
+{
+	int		i;
+	t_env	*node;
+
+	i = 0;
+	g_data->env = NULL;
+	if (!envp)
+		return ;
+	while (envp[i])
+	{
+		node = malloc(sizeof(t_env));
+		node->var = get_var(envp[i]);
+		node->value = get_value(envp[i]);
+		node->next_var = NULL;
+		ft_lstadd_back(&g_data->env, node);
+		i++;
+	}
+}
+
+void	init_data(char **envp)
+{
+	g_data = malloc(sizeof(t_data));
+	g_data->commands = NULL;
+	set_env(envp);
+	g_data->exit_status = 0;
+	g_data->child_process = 0;
+}
+
+t_cmd	*get_last(t_cmd *lst)
+{
+	if (lst)
+	{
+		while (lst->next_cmd)
+			lst = lst->next_cmd;
+	}
+	return (lst);
+}
+
+void	cmd_add_back(t_cmd *new)
+{
+	t_cmd	*l;
+
+	l = g_data->commands;
+	if (l)
+	{
+		while (l->next_cmd)
+			l = l->next_cmd;
+		l->next_cmd = new;
+	}
+	else
+		g_data->commands = new;
+}
+
+void	add_cmd(void)
+{
+	t_cmd	*command;
+
+	command = malloc(sizeof(t_cmd));
+	command->cmd_name = NULL;
+	command->arguments = NULL;
+	command->infile = 0;
+	command->outfile = 1;
+	command->hdoc = NULL;
+	command->red = NULL;
+	command->next_cmd = NULL;
+	cmd_add_back(command);
+}
+
+void	print(void)
+{
+	int			i;
+	t_cmd		*lst;
+	t_heredoc	*hlst;
+
+	printf("HELLOLLLL\n");
+	lst = g_data->commands;
+	while (lst)
+	{
+		printf("cmd = %s\n", lst->cmd_name);
+		i = 0;
+		while (lst->arguments && lst->arguments[i])
+		{
+			printf("args[%d] = %s     ", i, lst->arguments[i]);
+			i++;
+		}
+		printf("\ninfile = %d\n", lst->infile);
+		printf("outfile = %d\n", lst->outfile);
+		hlst = lst->hdoc;
+		while (hlst)
+		{
+			printf("hdoc = %s      ", hlst->dlmt);
+			hlst = hlst->next;
+		}
+		t_red *r = lst->red;
+		while (r)
+		{
+			printf("red = %s,%d      ", r->file_name, r->type);
+			r = r->next;
+		}
+		printf("\n");
+		lst = lst->next_cmd;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
     int *arr;
     char *str;
     int  i;
+	int k;
 	char **cmds;
 	t_red	*r = NULL;
 
+	(void) argc;
+	(void) argv;
+	init_data(envp);
+	t_env *e = g_data->env;
+	// while (e)
+	// {
+	// 	printf("var = %s\n", e->var);
+	// 	e = e->next_var;
+	// }
 	while (1)
 	{
 		i = 0;
@@ -432,15 +584,35 @@ int     main(void) {
 		arr = (int *)malloc(sizeof(int) *1024);
 		set_arr(str, &arr);
 		cmds = split_cmds(str, &arr);
+		free(arr);
+		arr =NULL;
 		i = 0;
 		while (cmds[i]) {
 			// printf("%s\n", cmds[i++]);
-			set_arr(str, &arr);
-			handle_redirection(&cmds[i], &arr, r);
+			add_cmd();
+			arr = (int *)malloc(sizeof(int) * 1024);
+			set_arr(cmds[i], &arr);
+			t_cmd *last =  get_last(g_data->commands);
+			last->red = handle_redirection(&cmds[i], &arr, last->red);
 			handle_quotes(&cmds[i], &arr);
-			handle_expansion(&cmds[i], &arr);
+			cmds[i] = handle_expansion(&cmds[i], &arr);
 			printf("%s\n", cmds[i]);
+			free(arr);
+			arr =NULL;
+			i++;
 		}
+		printf("i = %d\n\n", i);
+		print();
+
+
+
+
+
+
+
+
+
+
 		// printf("%s\n", str);
 		// while (str[i]) {
 		// 	printf("%d ", arr[i]);
