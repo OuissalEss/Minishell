@@ -61,8 +61,6 @@ void	free_data(void)
 		}
 		free(cmd->arguments);
 		cmd->arguments = NULL;
-		free(cmd->arguments);
-		cmd->arguments = NULL;
 		free(cmd);
 		cmd = NULL;
 		cmd = g_data->commands;

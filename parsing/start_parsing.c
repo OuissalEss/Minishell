@@ -49,21 +49,41 @@ char	**allocate_args(char *str, int *arr)
 	c = 1;
 	while (str[i])
 	{
-		if (((str[i] == ' ' || str[i] == '\t') && arr[i] == 0) && str[i + 1] != ' ' && str[i + 1] != '\t')
+		if (((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
+			&& (str[i + 1] != ' ' && str[i + 1] != '\t'))
 			c++;
 		i++;
 	}
 	args = malloc(sizeof(char *) * (c + 1));
 	i = 0;
-	while (i < c)
+	while (i < c + 2)
 		args[i++] = NULL;
 	return (args);
+}
+
+void	set_args(char *str, int *arr, t_cmd *last)
+{
+	int	a;
+	int	i;
+
+	i = 0;
+	a = 0;
+	while (str[i] && ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0))
+		i++;
+	while (str[i])
+	{
+		if (((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
+			&& (str[i + 1] != ' ' && str[i + 1] != '\t'))
+			a++;
+		else
+			last->arguments[a] = ft_charjoin(last->arguments[a], str[i]);
+		i++;
+	}
 }
 
 void	set_commands(char *str, int *arr)
 {
 	int		i;
-	int		a;
 	t_cmd	*last;
 
 	i = 0;
@@ -74,19 +94,8 @@ void	set_commands(char *str, int *arr)
 	{
 		last->cmd_name = ft_charjoin(last->cmd_name, str[i++]);
 	}
-	i = 0;
-	a = 0;
 	last->arguments = allocate_args(str, arr);
-	while (str[i])
-	{
-		if (((str[i] == ' ' || str[i] == '\t') && str[i + 1] != ' ' && str[i + 1] != '\t' && arr[i] == 0) && last->arguments != NULL)
-			a++;
-		else
-			last->arguments[a] = ft_charjoin(last->cmd_name, str[i++]);
-		while (str[i] && ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0))
-			i++;
-	}
-	printf("aaaaaaaaaaaaaaa\n");
+	set_args(str, arr, last);
 }
 
 void	parse(char *cmds)
