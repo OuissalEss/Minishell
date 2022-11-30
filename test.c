@@ -121,47 +121,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (p);
 }
 
-char	*get_varname(char *str, int i)
-{
-	int		i1;
-	int		j;
-	char	*var_name;
 
-	i1 = i;
-	while (str[i] && ft_isalnum(str[i]) != 0)
-		i++;
-	var_name = malloc(sizeof(char) * (i - i1 + 1));
-	j = 0;
-	while (str[i1] && ft_isalnum(str[i1]) != 0)
-		var_name[j++] = str[i1++];
-	var_name[j] = '\0';
-	return (var_name);
-}
-
-char	*get_varvalue(char *var_name)
-{
-	int		j;
-	char	*value;
-	t_env	*envp;
-
-	j = 0;
-	value = NULL;
-	envp = g_data->env;
-	if (!envp || var_name[0] == '\0')
-		return (ft_charjoin(value, '\0'));
-	while (envp)
-	{
-		if (strcmp(envp->var, var_name) == 0)
-		{
-			value = envp->value;
-			break ;
-		}
-		envp = envp->next_var;
-	}
-	if (value == NULL)
-		return (ft_charjoin(value, '\0'));
-	return (value);
-}
 
 
 
@@ -417,71 +377,7 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 		*lst = new;
 }
 
-char	*get_var(char *str)
-{
-	int		i;
-	char	*var;
 
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	var = malloc(sizeof(char) * i + 1);
-	i = 0;
-	while (str[i] && str[i] != '=')
-	{
-		var[i] = str[i];
-		i++;
-	}
-	var[i] = '\0';
-	return (var);
-}
-
-char	*get_value(char *str)
-{
-	int		start;
-	int		i;
-	char	*value;
-
-	start = 0;
-	while (str[start] && str[start] != '=')
-		start++;
-	start++;
-	value = malloc(sizeof(char) * strlen(&str[start]) + 1);
-	i = 0;
-	while (str[start])
-		value[i++] = str[start++];
-	value[i] = '\0';
-	return (value);
-}
-
-void	set_env(char **envp)
-{
-	int		i;
-	t_env	*node;
-
-	i = 0;
-	g_data->env = NULL;
-	if (!envp)
-		return ;
-	while (envp[i])
-	{
-		node = malloc(sizeof(t_env));
-		node->var = get_var(envp[i]);
-		node->value = get_value(envp[i]);
-		node->next_var = NULL;
-		ft_lstadd_back(&g_data->env, node);
-		i++;
-	}
-}
-
-void	init_data(char **envp)
-{
-	g_data = malloc(sizeof(t_data));
-	g_data->commands = NULL;
-	set_env(envp);
-	g_data->exit_status = 0;
-	g_data->child_process = 0;
-}
 
 t_cmd	*get_last(t_cmd *lst)
 {

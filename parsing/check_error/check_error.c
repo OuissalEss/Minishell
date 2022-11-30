@@ -10,19 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
+#include "../parsing.h"
 #include "check_error.h"
-
-int	skip_white_spaces(char *str, int i, t_errflags *flags)
-{
-	if (flags->dlmt == 1 && str[i] == ' ')
-		flags->dlmt = 0;
-	while (str[i] && str[i] == ' ')
-		i++;
-	if (str[i] == '\0' && i > 0)
-		i--;
-	return (i);
-}
 
 int	check_file_name(char *str, int i, char *redirect)
 {
@@ -40,7 +30,6 @@ int	check_file_name(char *str, int i, char *redirect)
 int	error(t_errflags *f, char *str, int i)
 {
 	char	*redirect;
-	char	*tmp;
 
 	if (f->pipe == 2 || (f->in == 1 && f->out == 1)
 		|| (f->pipe == 1 && f->hdoc == 1)
@@ -55,7 +44,6 @@ int	error(t_errflags *f, char *str, int i)
 	{
 		i++;
 		redirect = get_name(str, &i);
-		tmp = redirect;
 		redirect = expand_dollar(redirect);
 		if (redirect[0] == '\0' || check_file_name(str, i, redirect) != 1)
 		{

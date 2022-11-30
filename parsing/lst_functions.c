@@ -10,8 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include "parsing.h"
+
+void	env_add_back(t_env **lst, t_env *new)
+{
+	t_env	*l;
+
+	l = *lst;
+	if (l)
+	{
+		while (l->next_var)
+			l = l->next_var;
+		l->next_var = new;
+	}
+	else
+		*lst = new;
+}
 
 void	cmd_add_back(t_cmd *new)
 {
@@ -28,7 +43,7 @@ void	cmd_add_back(t_cmd *new)
 		g_data->commands = new;
 }
 
-t_cmd	*get_last(t_cmd *lst)
+t_cmd	*cmd_get_last(t_cmd *lst)
 {
 	if (lst)
 	{
@@ -38,11 +53,11 @@ t_cmd	*get_last(t_cmd *lst)
 	return (lst);
 }
 
-void	hdoc_add_back(t_heredoc **lst, t_heredoc *new)
+void	red_add_back(t_red **r, t_red *new)
 {
-	t_heredoc	*l;
+	t_red	*l;
 
-	l = *lst;
+	l = *r;
 	if (l)
 	{
 		while (l->next)
@@ -50,21 +65,7 @@ void	hdoc_add_back(t_heredoc **lst, t_heredoc *new)
 		l->next = new;
 	}
 	else
-		*lst = new;
-}
-
-int	add_heredoc(char *str, int i)
-{
-	t_cmd		*last;
-	t_heredoc	*hd;
-
-	last = get_last(g_data->commands);
-	hd = malloc(sizeof(t_heredoc));
-	hd->dlmt = get_name(str, &i);
-	hd->dlmt = remove_quotes(hd->dlmt);
-	hd->next = NULL;
-	hdoc_add_back(&(last->hdoc), hd);
-	return (i);
+		*r = new;
 }
 
 void	add_cmd(void)
@@ -76,7 +77,6 @@ void	add_cmd(void)
 	command->arguments = NULL;
 	command->infile = 0;
 	command->outfile = 1;
-	command->hdoc = NULL;
 	command->red = NULL;
 	command->next_cmd = NULL;
 	cmd_add_back(command);

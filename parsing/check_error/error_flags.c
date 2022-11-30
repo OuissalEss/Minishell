@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 #include "check_error.h"
 
 void	add_hdoc_err(t_errflags *f, char *s, int i)
@@ -74,6 +74,26 @@ void	set_flags2(t_errflags *flags, char *s, int i)
 	flags->out = 0;
 	flags->app = 0;
 	flags->hdoc = 0;
+}
+
+void	open_hdocs(t_errflags *f)
+{
+	char		*str;
+	t_heredoc	*h;
+
+	h = f->hdocs;
+	while (h)
+	{
+		while (1)
+		{
+			str = readline(">");
+			if (str == NULL || strcmp(str, h->dlmt) == 0)
+				break ;
+			free(str);
+			str = NULL;
+		}
+		h = h->next;
+	}
 }
 
 int	free_flags(t_errflags *f, int r)

@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "parsing.h"
+#include "parsing/parsing.h"
+#include "parsing/check_error/check_error.h"
 
 int	exist(char **s)
 {
@@ -40,7 +41,6 @@ void	free_data(void)
 {
 	int			i;
 	t_cmd		*cmd;
-	t_heredoc	*hd;
 
 	cmd = g_data->commands;
 	while (cmd)
@@ -61,16 +61,6 @@ void	free_data(void)
 		}
 		free(cmd->arguments);
 		cmd->arguments = NULL;
-		hd = cmd->hdoc;
-		while (hd)
-		{
-			cmd->hdoc = cmd->hdoc->next;
-			free(hd->dlmt);
-			hd->dlmt = NULL;
-			free(hd);
-			hd = NULL;
-			hd = cmd->hdoc;
-		}
 		free(cmd->arguments);
 		cmd->arguments = NULL;
 		free(cmd);
@@ -84,10 +74,10 @@ void	print(void)
 {
 	int			i;
 	t_cmd		*lst;
-	t_heredoc	*hlst;
+	t_red		*r;
 
-	printf("HELLOLLLL\n");
 	lst = g_data->commands;
+	printf("HELLOLLLL\n");
 	while (lst)
 	{
 		printf("cmd = %s\n", lst->cmd_name);
@@ -99,11 +89,11 @@ void	print(void)
 		}
 		printf("\ninfile = %d\n", lst->infile);
 		printf("outfile = %d\n", lst->outfile);
-		hlst = lst->hdoc;
-		while (hlst)
+		r = lst->red;
+		while (r)
 		{
-			printf("hdoc = %s      ", hlst->dlmt);
-			hlst = hlst->next;
+			printf("r = %s   type = %d   fd[0] = %d   fd[1] = %d", r->file_name, r->type, r->fd[0], r->fd[1]);
+			r = r->next;
 		}
 		printf("\n");
 		lst = lst->next_cmd;
@@ -131,7 +121,7 @@ int	main(int argc, char **argv, char **envp)
 	init_data(envp);
 	while (1)
 	{
-		str = readline("my prompt : ");
+		str = readline("my prompt > ");
 		add_history(str);
 		if (exist(&str) == 1 && check_error(str) == 1)
 		{

@@ -12,6 +12,7 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define NULL 0
 # define EOL '\0'
 
 # include <fcntl.h>
@@ -30,13 +31,6 @@ typedef struct s_env
 	struct s_env	*next_var;
 }				t_env;
 
-typedef struct s_heredoc
-{
-	char				*dlmt;
-	int					fd[2];
-	struct s_heredoc	*next;
-}			t_heredoc;
-
 typedef struct s_red
 {
 	char			*file_name;
@@ -52,7 +46,6 @@ typedef struct s_cmd
 	char			**arguments;
 	int				infile;
 	int				outfile;
-	t_heredoc		*hdoc;
 	t_red			*red;
 	struct s_cmd	*next_cmd;
 }				t_cmd;

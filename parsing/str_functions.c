@@ -10,8 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include "parsing.h"
+
+int	ft_isalnum(int c)
+{
+	if ((c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z')
+		|| (c >= '0' && c <= '9'))
+		return (1);
+	return (0);
+}
 
 char	*ft_charjoin(char *str, char x)
 {
@@ -79,31 +88,4 @@ char	*ft_strjoin(char *s1, char *s2)
 	free(s2);
 	s2 = NULL;
 	return (p);
-}
-
-int	skip_whitespace(char *str, int i)
-{
-	while (str[i] && str[i] == ' ')
-		i++;
-	return (i);
-}
-
-char	*get_name(char *str, int *j)
-{
-	int		i;
-	char	*name;
-
-	i = *j;
-	name = NULL;
-	i = skip_whitespace(str, i);
-	while (str[i] && ((str[i] != ' ' && str[i] != '|' && str[i] != '<'
-				&& str[i] != '>' ) || quotes(str, i) != 0))
-	{
-		name = ft_charjoin(name, str[i]);
-		if (str[i])
-			i++;
-	}
-	name = ft_charjoin(name, '\0');
-	*j = i;
-	return (name);
 }

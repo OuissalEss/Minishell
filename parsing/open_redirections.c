@@ -10,13 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 #include "parsing.h"
-#include "minishell.h"
 
 int	open_files(t_red *r)
 {
 	int	fd;
 
+	fd = -1;
 	if (r->type == 4)
 	{
 		fd = open(r->file_name, O_RDONLY, 0644);
@@ -104,7 +105,18 @@ void	set_red(t_cmd *cmd)
 	}
 }
 
-void	open_red(void)
+int	open_all_files(t_red *r)
+{
+	while (r)
+	{
+		if (open_files(r) == -1)
+			return (-1);
+		r = r->next;
+	}
+	return (0);
+}
+
+int	open_red(void)
 {
 	t_cmd	*cmd;
 	t_red	*r;
@@ -116,7 +128,8 @@ void	open_red(void)
 		while (r)
 		{
 			if (r->type == 3)
-				open_hdoc(r);
+				if (open_hdoc(r) == -1)
+					return (-1);
 			r = r->next;
 		}
 		cmd = cmd->next_cmd;
@@ -124,7 +137,7 @@ void	open_red(void)
 	cmd = g_data->commands;
 	while (cmd)
 	{
-		if (open_files(cmd->red) == -1)
+		if (open_all_files(cmd->red) == -1)
 			return (-1);
 		set_red(cmd);
 		cmd = cmd->next_cmd;

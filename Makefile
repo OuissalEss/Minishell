@@ -12,8 +12,11 @@
 
 NAME = minishell
 
-SRC = parsing/main.c parsing/init_data.c parsing/check_error.c parsing/parsing.c parsing/error_flags.c parsing/lst_functions.c \
-	parsing/quotes_functions.c parsing/redirections.c parsing/str_functions.c parsing/expand.c parsing/str_utils.c
+SRC = 	main.c parsing/handle_expansion.c parsing/handle_quotes.c parsing/handle_redirections.c \
+		parsing/lst_functions.c parsing/open_redirections.c parsing/split_cmd.c parsing/start_parsing.c \
+		parsing/str_functions.c parsing/itoa.c parsing/init_data.c \
+		parsing/check_error/check_error.c parsing/check_error/error_flags.c parsing/check_error/expand.c \
+		parsing/check_error/quotes_functions.c parsing/check_error/str_functions.c
 
 CC = @gcc 
 

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "parsing.h"
+#include "../../minishell.h"
+#include "check_error.h"
 
 int	quotes(const char *str, int x)
 {
@@ -57,7 +57,6 @@ char	*remove_quotes(char *str)
 		if (!(str[i] == '\"' && quotes(str, i) != 1)
 			&& !(str[i] == '\'' && quotes(str, i) != 2))
 			new_str[j++] = str[i];
-			//new_arr[j] = arr[i];
 		i++;
 	}
 	new_str[j] = '\0';

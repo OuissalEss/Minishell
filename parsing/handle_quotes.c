@@ -10,33 +10,41 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include "parsing.h"
 
-int	quotes(const char *str, int x)
+void	init_var(int *j, char **str, int **arr)
+{
+	if (arr[0][0] == 0)
+	{
+		str[0][0] = str[0][0];
+		*j = 1;
+	}
+}
+
+void	handle_quotes(char **str, int **arr)
 {
 	int	i;
-	int	sflag;
-	int	dflag;
+	int	j;
+	int	*new;
 
-	i = 0;
-	sflag = 0;
-	dflag = 0;
-	while (i <= x)
+	new = malloc(sizeof(int) * strlen(str[0]));
+	init_var(&j, str, arr);
+	if (arr[0][0] == 0)
+		new[0] = arr[0][0];
+	i = 1;
+	while (str[0][i] && str[0][0])
 	{
-		if (str[i] == '\"' && sflag == 0 && dflag == 0)
-			dflag = 1;
-		else if (str[i] == '\"' && dflag == 1)
-			dflag = 0;
-		else if (str[i] == '\'' && dflag == 0 && sflag == 0)
-			sflag = 1;
-		else if (str[i] == '\'' && sflag == 1)
-			sflag = 0;
+		if (!(arr[0][i] > 0 && arr[0][i - 1] == 0)
+			&& !(arr[0][i] == 0 && arr[0][i - 1] > 0))
+		{
+			new[j] = arr[0][i];
+			str[0][j++] = str[0][i];
+		}
 		i++;
 	}
-	if (sflag == 1)
-		return (1);
-	if (dflag == 1)
-		return (2);
-	return (0);
+	str[0][j] = '\0';
+	free(arr[0]);
+	arr[0] = NULL;
+	arr[0] = new;
 }
