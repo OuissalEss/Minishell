@@ -56,18 +56,21 @@ char	**allocate_args(char *str, int *arr)
 	}
 	args = malloc(sizeof(char *) * (c + 1));
 	i = 0;
-	while (i < c + 2)
+	while (i < c + 1)
 		args[i++] = NULL;
 	return (args);
 }
 
-void	set_args(char *str, int *arr, t_cmd *last)
+void	set_commands(char *str, int *arr)
 {
+	int		i;
 	int	a;
-	int	i;
+	t_cmd	*last;
 
 	i = 0;
 	a = 0;
+	last = cmd_get_last(g_data->commands);
+	last->arguments = allocate_args(str, arr);
 	while (str[i] && ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0))
 		i++;
 	while (str[i])
@@ -79,23 +82,8 @@ void	set_args(char *str, int *arr, t_cmd *last)
 			last->arguments[a] = ft_charjoin(last->arguments[a], str[i]);
 		i++;
 	}
-}
-
-void	set_commands(char *str, int *arr)
-{
-	int		i;
-	t_cmd	*last;
-
-	i = 0;
-	last = cmd_get_last(g_data->commands);
-	while (str[i] && ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0))
-		i++;
-	while (str[i] && ((str[i] != ' ' && str[i] != '\t') && arr[i] == 0))
-	{
-		last->cmd_name = ft_charjoin(last->cmd_name, str[i++]);
-	}
-	last->arguments = allocate_args(str, arr);
-	set_args(str, arr, last);
+	if (last->arguments[0] != NULL)
+		last->cmd_name = strdup(last->arguments[0]);
 }
 
 void	parse(char *cmds)
@@ -132,6 +120,7 @@ void	start_parsing(char *str)
 	i = 0;
 	while (cmds[i])
 		parse(cmds[i++]);
+	expand_red();
+	printf("aaaaaaaaaaaa\n");
 	open_red();
-	printf("heloooooooo\n");
 }

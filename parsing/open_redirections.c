@@ -59,12 +59,18 @@ void	write_in_file(char *str, t_red *r)
 
 int	open_hdoc(t_red *r)
 {
+	int		d;
 	char	*str;
 
 	if (pipe(r->fd) < 0)
 	{
 		printf("%s\n", strerror(errno));
 		return (-1);
+	}
+	d = fork();
+	if (d == 0)
+	{
+		return (0);
 	}
 	dup2(r->fd[1], 1);
 	while (1)
@@ -109,8 +115,11 @@ int	open_all_files(t_red *r)
 {
 	while (r)
 	{
-		if (open_files(r) == -1)
-			return (-1);
+		if (r->type != 3)
+		{
+			if (open_files(r) == -1)
+				return (-1);
+		}
 		r = r->next;
 	}
 	return (0);

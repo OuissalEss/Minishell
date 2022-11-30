@@ -23,6 +23,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/errno.h>
+# include <signal.h>
 
 typedef struct s_env
 {
@@ -34,6 +35,7 @@ typedef struct s_env
 typedef struct s_red
 {
 	char			*file_name;
+	int				*arr;
 	int				fd[2];
 	int				type;
 	int				expand;

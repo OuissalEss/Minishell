@@ -37,5 +37,6 @@ int 	expand_exit(char *str, char **new);
 int		expand(char *str, char **new);
 void	env_add_back(t_env **lst, t_env *new);
 void	init_data(char **envp);
+void	expand_red(void);
 
 #endif

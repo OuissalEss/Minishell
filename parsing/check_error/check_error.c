@@ -23,24 +23,22 @@ int	check_file_name(char *str, int i, char *redirect)
 	{
 		if ((redirect[j] == ' ' || redirect[i] == '\t') && quotes(str, i) == 0)
 			return (-1);
+		j++;
 	}
 	return (1);
 }
 
-int	check_red(t_errflags *f, char *str, int i)
+int	check_red(char *str, int i)
 {
 	char	*redirect;
 
-	if ((f->in == 1 || f->out == 1 || f->app == 1)
-		&& (str[i + 1] != '>' && str[i + 1] != '<'))
+	if (str[i] != '>' && str[i] != '<')
 	{
-		i++;
 		redirect = get_name(str, &i);
 		redirect = expand_dollar(redirect);
 		if (redirect[0] == '\0' || check_file_name(str, i, redirect) != 1)
 		{
-			printf("ambiguous redirect\n");
-			return (-3);
+			return (-1);
 		}
 	}
 	return (0);
@@ -55,8 +53,12 @@ int	error(t_errflags *f, char *str, int i)
 		|| (f->app == 1 && str[i] == '>' && str[i - 1] != '>')
 		|| (f->hdoc == 1 && str[i] == '<' && str[i - 1] != '<'))
 		return (-1);
-	if (check_red(f, str, i) == -1)
-		return (-1);
+	if ((f->in == 1 || f->out == 1 || f->app == 1))
+	{
+		if (check_red(str, i) != 0)
+			return (-3);
+	}
+	
 	return (1);
 }
 

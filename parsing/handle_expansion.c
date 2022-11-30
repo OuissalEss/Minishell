@@ -105,12 +105,14 @@ char	*handle_expansion(char **str, int **arr)
 	new = NULL;
 	while (str[0][i])
 	{
-		if (str[0][i] == '$' && arr[0][i] == 0)
+		if (str[0][i] == '$' && arr[0][i] != 1)
 		{
 			if (str[0][i + 1] == '?')
                 i += expand_exit(&str[0][i], &new);
 			else if (ft_isalnum(str[0][i + 1]) == 1)
 				i += expand(&str[0][i], &new);
+			else
+				new = ft_charjoin(new, str[0][i]);
 		}
 		else
 			new = ft_charjoin(new, str[0][i]);

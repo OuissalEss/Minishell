@@ -13,6 +13,31 @@
 #include "../minishell.h"
 #include "parsing.h"
 
+int	red(char *str, int *arr, int i, t_red *rd)
+{
+	int		s;
+	int		j;
+
+	s = i;
+	while (str[i] && (arr[i] != 0 || !(str[i] == ' '
+				|| str[i] == '\t' || str[i] == '<' || str[i] == '>')))
+	{
+		if (rd->type == 3 && arr[i] > 0)
+			rd->expand = arr[i];
+		rd->file_name = ft_charjoin(rd->file_name, str[i]);
+		i++;
+	}
+	rd->arr = malloc(sizeof(int) * (strlen(rd->file_name) + 1));
+	j = 0;
+	while (s < i)
+	{
+		rd->arr[j] = arr[s];
+		j++;
+		s++;
+	}
+	return (i);
+}
+
 int	add_red(t_red **r, int t, char *str, int *arr)
 {
 	t_red	*rd;
@@ -20,22 +45,14 @@ int	add_red(t_red **r, int t, char *str, int *arr)
 
 	i = (t % 2) + 1;
 	rd = malloc(sizeof(t_red));
+	rd->type = t;
 	rd->file_name = NULL;
-	rd->file_name = ft_charjoin(rd->file_name, '\0');
 	rd->expand = 0;
 	while (str[i] && (arr[i] == 0 && (str[i] == ' ' || str[i] == '\t')))
 		i++;
-	while (str[i] && (arr[i] != 0 || !(str[i] == ' '
-				|| str[i] == '\t' || str[i] == '<' || str[i] == '>')))
-	{
-		if (t == 3 && arr[i] > 0)
-			rd->expand = arr[i];
-		rd->file_name = ft_charjoin(rd->file_name, str[i]);
-		i++;
-	}
+	i = red(str, arr, i, rd);
 	rd->fd[0] = -1;
 	rd->fd[1] = -1;
-	rd->type = t;
 	rd->next = NULL;
 	red_add_back(r, rd);
 	return (i);
@@ -68,4 +85,29 @@ t_red	*handle_redirection(char **str, int **arr, t_red *red)
 	}
 	str[0][j] = '\0';
 	return (red);
+}
+
+void	expand_red(void)
+{
+	char	*tmp;
+	t_cmd	*cmd;
+	t_red	*r;
+
+	cmd = g_data->commands;
+	while (cmd)
+	{
+		r = cmd->red;
+		while (r)
+		{
+			if (r->type != 3)
+			{
+				tmp = r->file_name;
+				r->file_name = handle_expansion(&(r->file_name), &(r->arr));
+				free(tmp);
+				tmp = NULL;
+			}
+			r = r->next;
+		}
+		cmd = cmd->next_cmd;
+	}
 }

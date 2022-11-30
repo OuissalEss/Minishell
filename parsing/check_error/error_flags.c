@@ -119,8 +119,8 @@ int	free_flags(t_errflags *f, int r)
 	}
 	free(f);
 	f = NULL;
-	if (r == -2)
-		return (-1);
+	if (r == -3)
+		printf("ambiguous redirect\n");
 	return (r);
 }
 
