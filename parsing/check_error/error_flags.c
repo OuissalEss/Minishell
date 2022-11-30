@@ -66,7 +66,7 @@ void	set_flags2(t_errflags *flags, char *s, int i)
 		flags->dlmt = 1;
 		flags->hdoc = 0;
 		flags->hdoc_count++;
-		add_hdoc_err(flags, s, i + 1);
+		add_hdoc_err(flags, s, i);
 	}
 	flags->c = 0;
 	flags->pipe = 0;

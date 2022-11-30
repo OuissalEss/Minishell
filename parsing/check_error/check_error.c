@@ -27,18 +27,10 @@ int	check_file_name(char *str, int i, char *redirect)
 	return (1);
 }
 
-int	error(t_errflags *f, char *str, int i)
+int	check_red(t_errflags *f, char *str, int i)
 {
 	char	*redirect;
 
-	if (f->pipe == 2 || (f->in == 1 && f->out == 1)
-		|| (f->pipe == 1 && f->hdoc == 1)
-		|| (f->in == 1 && f->app == 1) || (f->in == 1 && f->hdoc == 1)
-		|| (f->out == 1 && f->app == 1) || (f->out == 1 && f->hdoc == 1)
-		|| (f->app == 1 && str[i] == '>' && str[i - 1] != '>')
-		|| (f->hdoc == 1 && str[i] == '<' && str[i - 1] != '<')
-		|| (f->dlmt == 1 && f->in == 1) || (f->dlmt == 1 && f->out == 1))
-		return (-1);
 	if ((f->in == 1 || f->out == 1 || f->app == 1)
 		&& (str[i + 1] != '>' && str[i + 1] != '<'))
 	{
@@ -48,9 +40,23 @@ int	error(t_errflags *f, char *str, int i)
 		if (redirect[0] == '\0' || check_file_name(str, i, redirect) != 1)
 		{
 			printf("ambiguous redirect\n");
-			return (-1);
+			return (-3);
 		}
 	}
+	return (0);
+}
+
+int	error(t_errflags *f, char *str, int i)
+{
+	if (f->pipe == 2 || (f->in == 1 && f->out == 1)
+		|| (f->pipe == 1 && f->hdoc == 1)
+		|| (f->in == 1 && f->app == 1) || (f->in == 1 && f->hdoc == 1)
+		|| (f->out == 1 && f->app == 1) || (f->out == 1 && f->hdoc == 1)
+		|| (f->app == 1 && str[i] == '>' && str[i - 1] != '>')
+		|| (f->hdoc == 1 && str[i] == '<' && str[i - 1] != '<'))
+		return (-1);
+	if (check_red(f, str, i) == -1)
+		return (-1);
 	return (1);
 }
 
@@ -75,7 +81,7 @@ int	check_error(char *str)
 		if (quotes(str, i) == 0)
 			set_flags(f, str, i);
 		if (error(f, str, i) < 0)
-			return (free_flags(f, -1));
+			return (free_flags(f, error(f, str, i)));
 		if (f->c == 1)
 			set_flags2(f, str, i);
 		if (f->hdoc_count > 16)

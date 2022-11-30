@@ -38,10 +38,10 @@ debug :
 	gcc  $(DEBUG) $(SRC) -lreadline -o $(NAME)
 
 clean :
-		$(RM) *.o
+		$(RM) *.o parsing/*.o parsing/check_error/*.o
 		@echo "Removed all the .o files"
 fclean :
-		$(RM) *.o
+		$(RM) *.o parsing/*.o parsing/check_error/*.o
 		$(RM) $(NAME)
 		@echo "Removed executble"
 
