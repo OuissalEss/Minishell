@@ -49,9 +49,11 @@ char	**allocate_args(char *str, int *arr)
 	c = 1;
 	while (str[i])
 	{
-		if (((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
-			&& (str[i + 1] != ' ' && str[i + 1] != '\t'))
-			c++;
+		if ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
+		{
+			if (!(str[i + 1] == ' ' || str[i + 1] == '\t') || arr[i + 1] != 0)
+				c++;
+		}
 		i++;
 	}
 	args = malloc(sizeof(char *) * (c + 1));
@@ -64,7 +66,7 @@ char	**allocate_args(char *str, int *arr)
 void	set_commands(char *str, int *arr)
 {
 	int		i;
-	int	a;
+	int		a;
 	t_cmd	*last;
 
 	i = 0;
@@ -75,10 +77,12 @@ void	set_commands(char *str, int *arr)
 		i++;
 	while (str[i])
 	{
-		if (((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
-			&& (str[i + 1] != ' ' && str[i + 1] != '\t'))
-			a++;
-		else
+		if ((str[i] == ' ' || str[i] == '\t') && arr[i] == 0)
+		{
+			if (!(str[i + 1] == ' ' || str[i + 1] == '\t') || arr[i + 1] != 0)
+				a++;
+		}
+		else if (!(str[i] == ' ' || str[i] == '\t') || arr[i] != 0)
 			last->arguments[a] = ft_charjoin(last->arguments[a], str[i]);
 		i++;
 	}
@@ -121,6 +125,5 @@ void	start_parsing(char *str)
 	while (cmds[i])
 		parse(cmds[i++]);
 	expand_red();
-	printf("aaaaaaaaaaaa\n");
 	open_red();
 }

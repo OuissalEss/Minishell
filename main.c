@@ -75,7 +75,6 @@ void	print(void)
 	t_red		*r;
 
 	lst = g_data->commands;
-	printf("HELLOLLLL\n");
 	while (lst)
 	{
 		printf("cmd = %s\n", lst->cmd_name);
@@ -124,8 +123,6 @@ int	main(int argc, char **argv, char **envp)
 		if (exist(&str) == 1 && check_error(str) == 1)
 		{
 			start_parsing(str);
-			printf("Rah ma segfaultach\n");
-			printf("str = %s.\n", str);
 			print();
 			free_data();
 		}
