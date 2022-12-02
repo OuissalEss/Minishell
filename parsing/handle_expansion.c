@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand2.c                                          :+:      :+:    :+:   */
+/*   handle_expansion.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 07:37:39 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 12:01:10 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 14:14:56 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ int	expand(char *str, char **new)
 	return (i);
 }
 
-int expand_exit(char *str, char **new)
+int	expand_exit(char *str, char **new)
 {
-    int     i;
-    char    *nb;
+	int		i;
+	char	*nb;
 	char	*n;
 
-    nb = ft_itoa(g_data->exit_status);
+	nb = ft_itoa(g_data->exit_status);
 	i = 0;
 	n = *new;
 	while (str[i])
@@ -91,7 +91,7 @@ int expand_exit(char *str, char **new)
 		i++;
 	}
 	*new = n;
-    free(nb);
+	free(nb);
 	nb = NULL;
 	return (2);
 }
@@ -108,7 +108,7 @@ char	*handle_expansion(char **str, int **arr)
 		if (str[0][i] == '$' && arr[0][i] != 1)
 		{
 			if (str[0][i + 1] == '?')
-                i += expand_exit(&str[0][i], &new);
+				i += expand_exit(&str[0][i], &new);
 			else if (ft_isalnum(str[0][i + 1]) == 1)
 				i += expand(&str[0][i], &new);
 			else

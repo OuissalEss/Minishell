@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:38 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 09:00:44 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 16:05:32 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,28 @@ int	check_file_name(char *str, int i, char *redirect)
 int	check_red(char *str, int i)
 {
 	char	*redirect;
+	char	*tmp;
+	int		r;
 
+	r = 0;
+	tmp = NULL;
+	redirect = NULL;
 	if (str[i] != '>' && str[i] != '<')
 	{
 		redirect = get_name(str, &i);
+		tmp = redirect;
 		redirect = expand_dollar(redirect);
+		
 		if (redirect[0] == '\0' || check_file_name(str, i, redirect) != 1)
-		{
-			return (-1);
-		}
+		r = -1;
+		if (tmp)
+			free(tmp);
+		tmp = NULL;
+		if (redirect)
+			free(redirect);
+		redirect = NULL;
 	}
-	return (0);
+	return (r);
 }
 
 int	error(t_errflags *f, char *str, int i)
@@ -58,7 +69,6 @@ int	error(t_errflags *f, char *str, int i)
 		if (check_red(str, i) != 0)
 			return (-3);
 	}
-	
 	return (1);
 }
 
@@ -80,7 +90,7 @@ int	check_error(char *str)
 	while (str[i])
 	{
 		i = skip_white_spaces(str, i, f);
-		if (quotes(str, i) == 0)
+		if (quotes(str, i) == 0 || str[i] == '\'' || str[i] == '\"')
 			set_flags(f, str, i);
 		if (error(f, str, i) < 0)
 			return (free_flags(f, error(f, str, i)));

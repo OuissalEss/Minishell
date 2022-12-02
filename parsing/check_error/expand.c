@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 18:36:09 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 11:16:22 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 14:06:37 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*expand_dollar(char *str)
 	int		i;
 	char	*new;
 
+	if (str == NULL)
+		return (NULL);
 	i = 0;
 	new = NULL;
 	new = ft_charjoin(new, '\0');

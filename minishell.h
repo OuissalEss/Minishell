@@ -6,13 +6,12 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:04 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 05:04:07 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 14:30:25 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define NULL 0
 # define EOL '\0'
 
 # include <fcntl.h>
@@ -62,5 +61,7 @@ typedef struct s_data
 }				t_data;
 
 t_data	*g_data;
+
+void	print(void);
 
 #endif

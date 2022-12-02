@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   open_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 07:28:15 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 08:24:29 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 14:16:48 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,53 +38,6 @@ int	open_files(t_red *r)
 		printf("%s\n", strerror(errno));
 		return (-1);
 	}
-	return (0);
-}
-
-void	write_in_file(char *str, t_red *r)
-{
-	int		*arr;
-	char	*tmp;
-
-	arr = malloc(sizeof(int) * strlen(str));
-	set_arr(str, &arr);
-	tmp = str;
-	if (r->expand == 0)
-		tmp = handle_expansion(&str, &arr);
-	printf("%s\n", tmp);
-	if (r->expand == 0)
-		free(tmp);
-	tmp = NULL;
-}
-
-int	open_hdoc(t_red *r)
-{
-	int		d;
-	char	*str;
-
-	if (pipe(r->fd) < 0)
-	{
-		printf("%s\n", strerror(errno));
-		return (-1);
-	}
-	d = fork();
-	if (d == 0)
-	{
-		return (0);
-	}
-	dup2(r->fd[1], 1);
-	while (1)
-	{
-		str = readline(">");
-		if (strcmp(str, r->file_name) == 0)
-			break ;
-		else
-			write_in_file(str, r);
-		if (str != NULL)
-			free(str);
-		str = NULL;
-	}
-	close(r->fd[1]);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/27 13:43:28 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 14:31:02 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ void	handle_quotes(char **str, int **arr);
 t_red	*handle_redirection(char **str, int **arr, t_red *red);
 char	**split_cmds(char *str, int *arr);
 int		open_red(void);
-int 	expand_exit(char *str, char **new);
+int		expand_exit(char *str, char **new);
 int		expand(char *str, char **new);
 void	env_add_back(t_env **lst, t_env *new);
 void	init_data(char **envp);
 void	expand_red(void);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putchar_fd(char c, int fd);
+void	free_data(void);
+int		open_hdoc(t_red *r);
 
 #endif

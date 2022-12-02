@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   start_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 10:55:36 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 07:30:28 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/02 16:00:47 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,19 @@ void	parse(char *cmds)
 	tmp = NULL;
 }
 
+void	free_cmds(char **cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds[i])
+	{
+		free(cmds[i]);
+		cmds[i] = NULL;
+		i++;
+	}
+}
+
 void	start_parsing(char *str)
 {
 	int		*arr;
@@ -126,4 +139,7 @@ void	start_parsing(char *str)
 		parse(cmds[i++]);
 	expand_red();
 	open_red();
+	free_cmds(cmds);
+	free(cmds);
+	cmds = NULL;
 }
