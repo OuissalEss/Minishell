@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+         #
+#    By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 10:48:35 by oessamdi          #+#    #+#              #
-#    Updated: 2022/12/05 03:49:22 by oessamdi         ###   ########.fr        #
+#    Updated: 2022/12/05 08:46:39 by slaajour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,11 @@ SRC = 	minishell.c print.c \
 		parsing/check_error/check_error.c parsing/check_error/error_flags.c parsing/check_error/expand.c \
 		parsing/check_error/quotes_functions.c parsing/check_error/str_functions.c \
 		\
-		execution/start_executing.c \
+		execution/start_executing.c execution/mini_utils/mini_utils0.c execution/mini_utils/mini_utils1.c \
+		execution/execution0.c \
+		\
+		builtins/do_cd.c builtins/do_echo.c builtins/do_env.c builtins/do_exit.c builtins/do_export.c \
+		builtins/do_pwd.c builtins/do_unset.c \
 
 CC = @gcc 
 
@@ -45,12 +49,12 @@ debug :
 	gcc  $(DEBUG) $(SRC) -lreadline -o $(NAME)
 
 clean :
-		$(RM) *.o parsing/*.o parsing/check_error/*.o execution/*.o
+		$(RM) *.o parsing/*.o parsing/check_error/*.o execution/*.o execution/mini_utils/*.o builtins/*.o
 		@echo "Removed all the .o files"
 fclean :
-		$(RM) *.o parsing/*.o parsing/check_error/*.o execution/*.o
+		$(RM) *.o parsing/*.o parsing/check_error/*.o execution/*.o execution/mini_utils/*.o builtins/*.o
 		$(RM) $(NAME)
-		@echo "Removed executable"
+		@echo "Executable removed"
 
 re : fclean all
 

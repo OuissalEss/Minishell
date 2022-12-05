@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/05 03:47:13 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/05 06:21:53 by slaajour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	handle_sigint(int sig)
 	}
 	write(1, "\n", 1);
 	rl_on_new_line();
-	rl_replace_line("", STDIN_FILENO);
+	// rl_replace_line("", STDIN_FILENO);
 	rl_redisplay();
 	g_data->exit_status = 1;
 }
@@ -69,7 +69,7 @@ void	handle_sigint(int sig)
 void	handle_sigquit(int sig)
 {
 	(void) sig;
-	rl_replace_line("", STDIN_FILENO);
+	// rl_replace_line("", STDIN_FILENO);
 	rl_redisplay();
 	if (g_data->child_process != 0)
 		exit(3);
@@ -98,7 +98,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			start_parsing(str);
 			start_executing();
-			print();
+			// print();
 			free_data();
 		}
 		if (str)
