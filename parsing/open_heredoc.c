@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 07:28:15 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 16:13:26 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/03 14:40:30 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	write_in_file(char *str, t_red *r)
 	int		*arr;
 	char	*tmp;
 
-	arr = malloc(sizeof(int) * strlen(str));
+	arr = malloc(sizeof(int) * (strlen(str) + 1));
 	set_arr(str, &arr);
 	tmp = str;
 	if (r->expand == 0)
@@ -32,6 +32,14 @@ void	write_in_file(char *str, t_red *r)
 	}
 }
 
+void	hdoc2(char	**str)
+{
+	if (*str != NULL)
+		free(*str);
+	else
+		printf("exit\n");
+}
+
 int	open_hdoc(t_red *r)
 {
 	char	*str;
@@ -41,14 +49,12 @@ int	open_hdoc(t_red *r)
 		printf("%s\n", strerror(errno));
 		return (-1);
 	}
-	printf("%s\n", r->file_name);
 	while (1)
 	{
 		str = readline(">");
 		if (str == NULL || strcmp(str, r->file_name) == 0)
 		{
-			if (str != NULL)
-				free(str);
+			hdoc2(&str);
 			str = NULL;
 			break ;
 		}

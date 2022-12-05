@@ -6,13 +6,15 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 16:00:32 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/05 03:47:13 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing/parsing.h"
 #include "parsing/check_error/check_error.h"
+#include <readline/history.h>
+#include <readline/readline.h>
 
 int	exist(char **s)
 {
@@ -28,7 +30,7 @@ int	exist(char **s)
 		g_data->exit_status = 0;
 		exit (0);
 	}
-	while (str[i] && str[i] == ' ')
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	r = 1;
 	if (str[i] == '\0')
@@ -57,11 +59,18 @@ void	handle_sigint(int sig)
 	{
 		printf("kill child process\n");
 	}
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", STDIN_FILENO);
+	rl_redisplay();
+	g_data->exit_status = 1;
 }
 
 void	handle_sigquit(int sig)
 {
 	(void) sig;
+	rl_replace_line("", STDIN_FILENO);
+	rl_redisplay();
 	if (g_data->child_process != 0)
 		exit(3);
 }
@@ -70,13 +79,17 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*str;
+	char			*str;
+	struct termios	term;
 
 	(void) argc;
 	(void) argv;
 	init_data(envp);
-	signal(SIGINT, &handle_sigint);
-	signal(SIGQUIT, &handle_sigquit);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
+	tcgetattr(0, &term);
+	// term.c_lflag &= ~ECHO;
+	// tcsetattr(0, 0, &term);
 	while (1)
 	{
 		str = readline("my prompt > ");
@@ -84,6 +97,7 @@ int	main(int argc, char **argv, char **envp)
 		if (exist(&str) == 1 && check_error(str) == 1)
 		{
 			start_parsing(str);
+			start_executing();
 			print();
 			free_data();
 		}

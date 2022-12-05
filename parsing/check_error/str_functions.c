@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:41 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 14:40:48 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/05 03:45:20 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int	skip_white_spaces(char *str, int i, t_errflags *flags)
 {
-	if (flags->dlmt == 1 && str[i] == ' ')
+	if (flags->dlmt == 1 && (str[i] == ' ' || str[i] == '\t'))
 		flags->dlmt = 0;
-	while (str[i] && str[i] == ' ')
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	if (str[i] == '\0' && i > 0)
 		i--;
@@ -31,11 +31,11 @@ char	*get_name(char *str, int *j)
 
 	i = *j;
 	name = NULL;
-	while (str[i] && str[i] == ' ')
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	while (str[i])
 	{
-		if ((str[i] == ' ' || str[i] == '|' || str[i] == '<'
+		if ((str[i] == ' ' || str[i] == '\t' || str[i] == '|' || str[i] == '<'
 				|| str[i] == '>' ) && quotes(str, i) == 0)
 			break ;
 		name = ft_charjoin(name, str[i]);

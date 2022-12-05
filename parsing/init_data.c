@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/11/29 07:24:44 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/03 16:41:44 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ void	set_env(char **envp)
 	{
 		node = malloc(sizeof(t_env));
 		node->var = get_var(envp[i]);
-		node->value = get_value(envp[i]);
+		node->value = NULL;
+		if (strcmp(node->var, "OLDPWD") != 0)
+			node->value = get_value(envp[i]);
 		node->next_var = NULL;
 		env_add_back(&g_data->env, node);
 		i++;

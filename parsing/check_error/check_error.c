@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:38 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 16:05:32 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/03 12:22:40 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ int	check_file_name(char *str, int i, char *redirect)
 	j = 0;
 	while (redirect[j])
 	{
-		if ((redirect[j] == ' ' || redirect[i] == '\t') && quotes(str, i) == 0)
+		if ((redirect[j] == ' ' || redirect[j] == '\t') && quotes(str, i) == 0)
 			return (-1);
+		i++;
 		j++;
 	}
 	return (1);
@@ -58,7 +59,6 @@ int	check_red(char *str, int i)
 int	error(t_errflags *f, char *str, int i)
 {
 	if (f->pipe == 2 || (f->in == 1 && f->out == 1)
-		|| (f->pipe == 1 && f->hdoc == 1)
 		|| (f->in == 1 && f->app == 1) || (f->in == 1 && f->hdoc == 1)
 		|| (f->out == 1 && f->app == 1) || (f->out == 1 && f->hdoc == 1)
 		|| (f->app == 1 && str[i] == '>' && str[i - 1] != '>')

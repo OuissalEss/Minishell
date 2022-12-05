@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:04 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 14:30:25 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/05 00:28:33 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/history.h>
 # include <sys/errno.h>
 # include <signal.h>
+# include <termios.h>
 
 typedef struct s_env
 {
@@ -63,5 +64,7 @@ typedef struct s_data
 t_data	*g_data;
 
 void	print(void);
+void	start_parsing(char *str);
+void	start_executing(void);
 
 #endif

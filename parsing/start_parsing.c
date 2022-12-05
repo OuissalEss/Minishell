@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 10:55:36 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 16:00:47 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/03 13:56:15 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	set_arr(char *str, int **array)
 
 	arr = *array;
 	arr[0] = 0;
+	if (str[0] == '\0')
+		return ;
 	if (str[0] == '\'')
 		arr[0] = 1;
 	else if (str[0] == '\"')

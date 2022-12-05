@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 14:31:02 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/05 00:28:15 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int		ft_isalnum(int c);
 void	*ft_calloc(size_t count, size_t size);
 void	init_data(char **envp);
 int		check_error(char *str);
-void	start_parsing(char *str);
 void	cmd_add_back(t_cmd *new);
 t_cmd	*cmd_get_last(t_cmd *lst);
 void	add_cmd(void);
