@@ -29,9 +29,11 @@ char	*expand_dollar(char *str)
 		if (str[i] == '$' && quotes(str, i) != 1)
 		{
 			if (str[i + 1] == '?')
-				i += expand_exit(&str[i], &new);
+				i += expand_exit(&new);
 			else if (ft_isalnum(str[i + 1]) == 1)
 				i += expand(&str[i], &new);
+			else
+				new = ft_charjoin(new, str[i]);
 		}
 		else
 			new = ft_charjoin(new, str[i]);

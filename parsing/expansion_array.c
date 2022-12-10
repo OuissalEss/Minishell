@@ -13,112 +13,84 @@
 #include "../minishell.h"
 #include "parsing.h"
 
-char	*get_varname(char *str, int i)
-{
-	int		i1;
-	int		j;
-	char	*var_name;
-
-	i1 = i;
-	while (str[i] && ft_isalnum(str[i]) != 0)
-		i++;
-	var_name = malloc(sizeof(char) * (i - i1 + 1));
-	j = 0;
-	while (str[i1] && ft_isalnum(str[i1]) != 0)
-		var_name[j++] = str[i1++];
-	var_name[j] = '\0';
-	return (var_name);
-}
-
-char	*get_varvalue(char *var_name)
-{
-	char	*value;
-	t_env	*envp;
-
-	value = NULL;
-	envp = g_data->env;
-	if (!envp || var_name[0] == '\0')
-		return (ft_charjoin(value, '\0'));
-	while (envp)
-	{
-		if (strcmp(envp->var, var_name) == 0)
-		{
-			value = envp->value;
-			break ;
-		}
-		envp = envp->next_var;
-	}
-	if (value == NULL)
-		return (ft_charjoin(value, '\0'));
-	return (value);
-}
-
-int	expand(char *str, char **new)
+int	array_expand(char *str, int **new, int *x)
 {
 	int		i;
-	char	*n;
+	int		j;
 	char	*var_name;
 	char	*var_value;
 
 	var_name = get_varname(str, 1);
 	var_value = get_varvalue(var_name);
-	n = *new;
 	i = 0;
+	j = *x;
 	while (var_value[i])
 	{
-		n = ft_charjoin(n, var_value[i]);
+		if (j == 0)
+			new[0][j] = new[0][j];
+		else
+			new[0][j] = new[0][j - 1];
+		j++;
 		i++;
 	}
-	*new = n;
+	*x = j;
 	i = strlen(var_name);
 	free(var_name);
 	var_name = NULL;
 	return (i);
 }
 
-int	expand_exit(char **new)
+int	array_exit(int **new, int *x)
 {
 	int		i;
+	int		j;
 	char	*nb;
-	char	*n;
 
 	nb = ft_itoa(g_data->exit_status);
 	i = 0;
-	n = *new;
+	j = *x;
 	while (nb[i])
 	{
-		n = ft_charjoin(n, nb[i]);
+		if (j == 0)
+			new[0][j] = new[0][j];
+		else
+			new[0][j] = new[0][j - 1];
 		i++;
+		j++;
 	}
-	*new = n;
+	*x = j;
 	free(nb);
 	nb = NULL;
 	return (1);
 }
 
-char	*handle_expansion(char **str, int **arr)
+int	*new_array(char **str, int **arr, char *new)
 {
-	int		i;
-	char	*new;
+	int	i;
+	int	j;
+	int	*new_arr;
 
 	i = 0;
-	new = NULL;
+	j = 0;
+	new_arr = malloc(sizeof(int) * (strlen(new) + 1));
+	new_arr[0] = arr[0][0];
 	while (str[0][i])
 	{
 		if (str[0][i] == '$' && arr[0][i] != 1)
 		{
 			if (str[0][i + 1] == '?')
-				i += expand_exit(&new);
+				i += array_exit(&new_arr, &j);
 			else if (ft_isalnum(str[0][i + 1]) == 1)
-				i += expand(&str[0][i], &new);
+				i += array_expand(&str[0][i], &new_arr, &j);
 			else
-				new = ft_charjoin(new, str[0][i]);
+				new_arr[j] = arr[0][i];
 		}
 		else
-			new = ft_charjoin(new, str[0][i]);
+			new_arr[j] = arr[0][i];
 		i++;
+		j++;
 	}
-	new = ft_charjoin(new, '\0');
-	arr[0] = new_array(str, arr, new);
-	return (new);
+    free(arr[0]);
+    arr[0] = NULL;
+	return (new_arr);
 }

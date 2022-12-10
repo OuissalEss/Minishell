@@ -87,7 +87,9 @@ int	do_exit(t_cmd *head)
 	}
 	if (i > 2)
 	{
-		ft_putstr_fd("exit\nMinishell: exit: too many arguments\n", 1);
+		if (previous_cmd(head) == 0 && !(head->next_cmd))
+			ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("Minishell: exit: too many arguments\n", 1);
 		return (2);
 	}
 	else
