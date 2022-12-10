@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+         #
+#    By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 10:48:35 by oessamdi          #+#    #+#              #
-#    Updated: 2022/12/05 08:46:39 by slaajour         ###   ########.fr        #
+#    Updated: 2022/12/10 06:08:06 by oessamdi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRC = 	minishell.c print.c \
+SRC = 	minishell.c \
 		\
 		parsing/handle_expansion.c parsing/handle_quotes.c parsing/handle_redirections.c \
 		parsing/lst_functions.c parsing/open_redirections.c parsing/split_cmd.c parsing/start_parsing.c \
@@ -22,15 +22,15 @@ SRC = 	minishell.c print.c \
 		parsing/check_error/check_error.c parsing/check_error/error_flags.c parsing/check_error/expand.c \
 		parsing/check_error/quotes_functions.c parsing/check_error/str_functions.c \
 		\
-		execution/start_executing.c execution/mini_utils/mini_utils0.c execution/mini_utils/mini_utils1.c \
-		execution/execution0.c \
+		execution/start_executing.c execution/mini_utils/mini_utils.c execution/get_path.c \
+		execution/path_utils.c execution/execution_utils.c execution/exit_status.c \
 		\
-		builtins/do_cd.c builtins/do_echo.c builtins/do_env.c builtins/do_exit.c builtins/do_export.c \
-		builtins/do_pwd.c builtins/do_unset.c \
+		execution/builtins/do_cd.c execution/builtins/do_echo.c execution/builtins/do_env.c execution/builtins/do_exit.c \
+		execution/builtins/do_export.c execution/builtins/export_utils.c execution/builtins/do_pwd.c execution/builtins/do_unset.c \
 
 CC = @gcc 
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
 
 DEBUG = -fsanitize=address -g
 

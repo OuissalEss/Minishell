@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:55 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/05 06:21:53 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:42:46 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,41 +55,43 @@ void	env(void)
 void	handle_sigint(int sig)
 {
 	(void) sig;
-	if (g_data->child_process != 0)
+	if (g_data->child_process != 0 && !kill(g_data->child_process, SIGKILL))
 	{
-		printf("kill child process\n");
+		g_data->exit_status = 130;
+		write(1, "\n", 1);
 	}
-	write(1, "\n", 1);
-	rl_on_new_line();
-	// rl_replace_line("", STDIN_FILENO);
-	rl_redisplay();
-	g_data->exit_status = 1;
+	else
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		//rl_replace_line("", STDIN_FILENO);
+		rl_redisplay();
+		g_data->exit_status = 1;
+	}
+	g_data->child_process = 0;
 }
 
 void	handle_sigquit(int sig)
 {
 	(void) sig;
-	// rl_replace_line("", STDIN_FILENO);
+	if (g_data->child_process != 0 && !kill(g_data->child_process, SIGKILL))
+	{
+		printf("Quit: 3\n");
+		g_data->exit_status = 131;
+	}
+	g_data->child_process = 0;
 	rl_redisplay();
-	if (g_data->child_process != 0)
-		exit(3);
 }
-
-//waaa hanaaaa jiiiiit
 
 int	main(int argc, char **argv, char **envp)
 {
 	char			*str;
-	struct termios	term;
 
 	(void) argc;
 	(void) argv;
 	init_data(envp);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
-	tcgetattr(0, &term);
-	// term.c_lflag &= ~ECHO;
-	// tcsetattr(0, 0, &term);
 	while (1)
 	{
 		str = readline("my prompt > ");
@@ -98,7 +100,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			start_parsing(str);
 			start_executing();
-			// print();
 			free_data();
 		}
 		if (str)

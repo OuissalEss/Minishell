@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   do_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 18:37:35 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/04 02:51:23 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:06:40 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "../execution.h"
 
-void	go_home(char *pwd)
+char	*go_home(char *pwd)
 {
 	t_env	*head;
 
@@ -27,6 +26,7 @@ void	go_home(char *pwd)
 		}
 		head = head->next_var;
 	}
+	return (pwd);
 }
 
 void	update_pwd(char *old_pwd, char *pwd)
@@ -45,26 +45,29 @@ void	update_pwd(char *old_pwd, char *pwd)
 	g_data->env = head;
 }
 
-void	do_cd(void)
+int	do_cd(t_cmd *cmd)
 {
 	char	*pwd;
 	char	*old_pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	pwd = NULL;
-	if (!g_data->commands->arguments[1])
+	if (!cmd->arguments[1])
 	{
-		go_home(pwd);
+		pwd = go_home(pwd);
 		update_pwd(old_pwd, pwd);
 	}
-	else if (chdir(g_data->commands->arguments[1]) == 0)
+	else if (chdir(cmd->arguments[1]) == 0)
 	{
 		pwd = getcwd(NULL, 0);
 		update_pwd(old_pwd, pwd);
 	}
 	else
 	{
-		printf("Minishell: cd: %s: No such file or directory\n",
-			g_data->commands->arguments[1]);
+		ft_putstr_fd("Minishell: cd: ", cmd->outfile);
+		ft_putstr_fd(cmd->arguments[1], cmd->outfile);
+		ft_putstr_fd(": No such file or directory\n", cmd->outfile);
+		return (1);
 	}
+	return (0);
 }

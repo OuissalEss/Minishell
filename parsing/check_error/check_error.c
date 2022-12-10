@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:38 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/03 12:22:40 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/08 11:38:20 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	check_red(char *str, int i)
 		redirect = get_name(str, &i);
 		tmp = redirect;
 		redirect = expand_dollar(redirect);
-		
 		if (redirect[0] == '\0' || check_file_name(str, i, redirect) != 1)
 		r = -1;
 		if (tmp)
@@ -63,17 +62,25 @@ int	error(t_errflags *f, char *str, int i)
 		|| (f->out == 1 && f->app == 1) || (f->out == 1 && f->hdoc == 1)
 		|| (f->app == 1 && str[i] == '>' && str[i - 1] != '>')
 		|| (f->hdoc == 1 && str[i] == '<' && str[i - 1] != '<'))
+	{
+		printf("hello\n");
+		g_data->exit_status = 258;
 		return (-1);
+	}
 	if ((f->in == 1 || f->out == 1 || f->app == 1))
 	{
 		if (check_red(str, i) != 0)
+		{
+			g_data->exit_status = 1;
 			return (-3);
+		}
 	}
 	return (1);
 }
 
 int	max_heredoc(t_errflags *f)
 {
+	g_data->exit_status = 2;
 	printf("maximum here-document count exceeded\n");
 	return (free_flags(f, -2));
 }

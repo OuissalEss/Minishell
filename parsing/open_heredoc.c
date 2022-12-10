@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 07:28:15 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/03 14:40:30 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/08 09:44:21 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	hdoc2(char	**str)
 {
 	if (*str != NULL)
 		free(*str);
-	else
-		printf("exit\n");
 }
 
 int	open_hdoc(t_red *r)

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:38:21 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/05 06:19:19 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:04:27 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
-# include "minishell.h"
+# include "../minishell.h"
+# include "../parsing/parsing.h"
 
 		// EXEC //
 void	start_executing(void);
@@ -32,19 +33,36 @@ int		ft_isalnum(int c);
 int		ft_strncmp(char *s1, char *s2, int n);
 
 		//   BUILTINS FUNCTIONS   //
-void	builtins(void);
-void	do_pwd(void);
-void	do_env(void);
-void	do_echo(void);
-void	do_cd(void);
+int		builtins(t_cmd *cmd);
+void	do_pwd(t_cmd *cmd);
+void	do_env(t_cmd *cmd);
+void	do_echo(t_cmd *cmd);
+int		do_cd(t_cmd *cmd);
 void	update_pwd(char *old_pwd, char *pwd);
-void	go_home(char *pwd);
-void	do_export(void);
+char	*go_home(char *pwd);
+int		do_export(t_cmd *cmd);
+char	*env_name(char *str, int *add);
+char	*env_value(char *str);
+int		exist_env(char *name);
+int		valid(char	*str);
 int		is_valid(char	*str);
-void	display_export(void);
-void	do_unset(void);
+void	display_export(t_cmd *cmd);
+int		do_unset(t_cmd *cmd);
 void	remove_node(char *str);
 void	supprimer_node(int pos);
-void	do_exit(void);
+int		do_exit(t_cmd *cmd);
+
+		// EXECUTION FUNCTIONS //
+char	*check_path(char *cmd_name);
+void	free_path(char **path);
+char	**add_slash(char **path, char *cmd_name);
+char	*get_path(void);
+int		count_path(char *str);
+int		lst_size(t_env *env);
+int		is_builtin(char *cmd);
+int		ft_pipe(t_cmd *cmd);
+int		previous(t_cmd *cmd);
+void	wait_for_proccess(void);
+int		exit_status(void);
 
 #endif

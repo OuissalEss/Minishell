@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   do_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:19:15 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/05 09:17:27 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:06:38 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "../execution.h"
 
 int	str_search(char *str)
@@ -29,29 +28,27 @@ int	str_search(char *str)
 	return (1);
 }
 
-void	do_echo(void)
+void	do_echo(t_cmd *cmd)
 {
 	int		i;
 	int		oneorzero;
-	t_cmd	*head;
 
 	oneorzero = 0;
-	head = g_data->commands;
-	if (head->arguments[1])
+	if (cmd->arguments[1])
 	{
-		if (str_search(head->arguments[1]) == 1)
+		if (str_search(cmd->arguments[1]) == 1)
 			oneorzero = 1;
 		i = 1;
-		while (head->arguments[i] && str_search(head->arguments[i]) == 1)
+		while (cmd->arguments[i] && str_search(cmd->arguments[i]) == 1)
 			i++;
-		while (head->arguments[i])
+		while (cmd->arguments[i])
 		{
-			ft_putstr(head->arguments[i]);
-			if (head->arguments[i + 1])
-				printf(" ");
+			ft_putstr_fd(cmd->arguments[i], cmd->outfile);
+			if (cmd->arguments[i + 1])
+				ft_putstr_fd(" ", cmd->outfile);
 			i++;
 		}
 	}
-	if (oneorzero != 10)
-		printf("\n");
+	if (oneorzero != 1)
+		ft_putstr_fd("\n", cmd->outfile);
 }

@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mini_utils0.c                                      :+:      :+:    :+:   */
+/*   mini_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:36:17 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/05 04:52:32 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:06:01 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
-#include "../../execution.h"
+#include "../execution.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
 	i = 0;
+	if (s2 == NULL)
+		return (0);
 	while (s1[i] && s2[i])
 	{
-			i++;
 		if (s1[i] != s2[i])
 			return (0);
+		i++;
 	}
+	if (s1[i] != '\0' || s2[i] != '\0')
+		return (0);
 	return (1);
 }
 

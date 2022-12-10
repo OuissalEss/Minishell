@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 10:48:22 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/05 00:28:15 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/10 05:51:06 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar_fd(char c, int fd);
 void	free_data(void);
 int		open_hdoc(t_red *r);
+void	free_cmds(char **cmds);
 
 #endif

@@ -6,12 +6,25 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 14:22:30 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/02 15:21:08 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/10 05:50:55 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "parsing.h"
+
+void	free_cmds(char **cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds[i])
+	{
+		free(cmds[i]);
+		cmds[i] = NULL;
+		i++;
+	}
+}
 
 void	free_args(char **args)
 {
@@ -55,10 +68,6 @@ void	free_data(void)
 	while (cmd)
 	{
 		g_data->commands = g_data->commands->next_cmd;
-		if (cmd->infile != 0)
-			close(cmd->infile);
-		if (cmd->outfile != 1)
-			close(cmd->outfile);
 		free(cmd->cmd_name);
 		cmd->cmd_name = NULL;
 		free_red(cmd->red);

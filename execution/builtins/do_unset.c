@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   do_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:24:42 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/05 06:19:13 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/10 06:06:21 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "../execution.h"
 
 void	supprimer_node(int pos)
@@ -22,7 +21,7 @@ void	supprimer_node(int pos)
 	tmp = g_data->env;
 	if (pos == 0)
 	{
-		head = head->next_var;
+		g_data->env = head->next_var;
 		free(tmp);
 		tmp = NULL;
 	}
@@ -59,25 +58,44 @@ void	remove_node(char *str)
 	}
 }
 
-void	do_unset(void)
+int	valid(char	*str)
 {
-	t_cmd	*head;
+	int	j;
+
+	j = 0;
+	if (is_alpha(str[0]) == 0)
+		return (-1);
+	while (str[j])
+	{
+		if (ft_isalnum(str[j]) == 0)
+			return (-1);
+		j++;
+	}
+	return (1);
+}
+
+int	do_unset(t_cmd *cmd)
+{
 	int		i;
 
-	head = g_data->commands;
-	if (!head->arguments[1])
-		return ;
+	if (!cmd->arguments[1])
+		return (0);
 	else
 	{
 		i = 1;
-		while (head->arguments[i])
+		while (cmd->arguments[i])
 		{
-			if (is_valid(head->arguments[i]) == 1)
-				remove_node(head->arguments[i]);
+			if (valid(cmd->arguments[i]) == 1)
+				remove_node(cmd->arguments[i]);
 			else
-				printf("Minishell: unset: `%s': not a valid identifier\n",
-					head->arguments[i]);
+			{
+				ft_putstr_fd("Minishell: unset: `", cmd->outfile);
+				ft_putstr_fd(cmd->arguments[i], cmd->outfile);
+				ft_putstr_fd("`: not a valid identifier\n", cmd->outfile);
+				return (1);
+			}
 			i++;
 		}
 	}
+	return (0);
 }

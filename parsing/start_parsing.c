@@ -6,7 +6,7 @@
 /*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 10:55:36 by oessamdi          #+#    #+#             */
-/*   Updated: 2022/12/03 13:56:15 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/10 05:50:48 by oessamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,6 @@ void	parse(char *cmds)
 	arr = NULL;
 	free(tmp);
 	tmp = NULL;
-}
-
-void	free_cmds(char **cmds)
-{
-	int	i;
-
-	i = 0;
-	while (cmds[i])
-	{
-		free(cmds[i]);
-		cmds[i] = NULL;
-		i++;
-	}
 }
 
 void	start_parsing(char *str)
