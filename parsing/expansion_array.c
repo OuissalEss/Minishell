@@ -13,14 +13,14 @@
 #include "../minishell.h"
 #include "parsing.h"
 
-int	array_expand(char *str, int **new, int *x)
+int	array_expand(char *str, int *arr, int **new, int *x)
 {
 	int		i;
 	int		j;
 	char	*var_name;
 	char	*var_value;
 
-	var_name = get_varname(str, 1);
+	var_name = get_varname(str, arr, 1);
 	var_value = get_varvalue(var_name);
 	i = 0;
 	j = *x;
@@ -33,7 +33,7 @@ int	array_expand(char *str, int **new, int *x)
 		j++;
 		i++;
 	}
-	*x = j;
+	*x = j - 1;
 	i = strlen(var_name);
 	free(var_name);
 	var_name = NULL;
@@ -58,13 +58,13 @@ int	array_exit(int **new, int *x)
 		i++;
 		j++;
 	}
-	*x = j;
+	*x = j - 1;
 	free(nb);
 	nb = NULL;
 	return (1);
 }
 
-int	*new_array(char **str, int **arr, char *new)
+int	*set_new_array(char **str, int **arr, char *new)
 {
 	int	i;
 	int	j;
@@ -81,7 +81,7 @@ int	*new_array(char **str, int **arr, char *new)
 			if (str[0][i + 1] == '?')
 				i += array_exit(&new_arr, &j);
 			else if (ft_isalnum(str[0][i + 1]) == 1)
-				i += array_expand(&str[0][i], &new_arr, &j);
+				i += array_expand(&str[0][i], &arr[0][i], &new_arr, &j);
 			else
 				new_arr[j] = arr[0][i];
 		}
@@ -90,7 +90,15 @@ int	*new_array(char **str, int **arr, char *new)
 		i++;
 		j++;
 	}
-    free(arr[0]);
-    arr[0] = NULL;
+	return (new_arr);
+}
+
+int	*new_array(char **str, int **arr, char *new)
+{
+	int	*new_arr;
+
+	new_arr = set_new_array(str, arr, new);
+	free(arr[0]);
+	arr[0] = NULL;
 	return (new_arr);
 }

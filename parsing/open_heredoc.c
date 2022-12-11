@@ -30,6 +30,8 @@ void	write_in_file(char *str, t_red *r)
 		free(tmp);
 		tmp = NULL;
 	}
+	free(arr);
+	arr = NULL;
 }
 
 void	hdoc2(char	**str)

@@ -64,7 +64,7 @@ void	handle_sigint(int sig)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		//rl_replace_line("", STDIN_FILENO);
+		rl_replace_line("", STDIN_FILENO);
 		rl_redisplay();
 		g_data->exit_status = 1;
 	}

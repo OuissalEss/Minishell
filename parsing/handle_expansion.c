@@ -13,7 +13,7 @@
 #include "../minishell.h"
 #include "parsing.h"
 
-char	*get_varname(char *str, int i)
+char	*get_varname(char *str, int *arr, int i)
 {
 	int		i1;
 	int		j;
@@ -21,11 +21,19 @@ char	*get_varname(char *str, int i)
 
 	i1 = i;
 	while (str[i] && ft_isalnum(str[i]) != 0)
+	{
+		if (arr[i] != arr[i - 1])
+			break ;
 		i++;
+	}
 	var_name = malloc(sizeof(char) * (i - i1 + 1));
 	j = 0;
 	while (str[i1] && ft_isalnum(str[i1]) != 0)
+	{
+		if (arr[i1] != arr[i1 - 1])
+			break ;
 		var_name[j++] = str[i1++];
+	}
 	var_name[j] = '\0';
 	return (var_name);
 }
@@ -53,14 +61,14 @@ char	*get_varvalue(char *var_name)
 	return (value);
 }
 
-int	expand(char *str, char **new)
+int	expand(char *str, int *arr, char **new)
 {
 	int		i;
 	char	*n;
 	char	*var_name;
 	char	*var_value;
 
-	var_name = get_varname(str, 1);
+	var_name = get_varname(str, arr, 1);
 	var_value = get_varvalue(var_name);
 	n = *new;
 	i = 0;
@@ -110,7 +118,7 @@ char	*handle_expansion(char **str, int **arr)
 			if (str[0][i + 1] == '?')
 				i += expand_exit(&new);
 			else if (ft_isalnum(str[0][i + 1]) == 1)
-				i += expand(&str[0][i], &new);
+				i += expand(&str[0][i], &arr[0][i], &new);
 			else
 				new = ft_charjoin(new, str[0][i]);
 		}
