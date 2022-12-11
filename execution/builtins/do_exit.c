@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:42:00 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/10 05:55:14 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/11 02:24:57 by slaajour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ int	is_valid_arg(t_cmd *head, char *arg)
 		{
 			if (previous_cmd(head) == 0 && !(head->next_cmd))
 				ft_putstr_fd("exit\n", 1);
-			printf("Minishell: exit: %s: numeric argument required\n",
-				arg);
+			ft_putstr_fd("Minishell: exit: ", 2);
+			ft_putstr_fd(arg, 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			return (255);
 		}
 		i++;
@@ -89,7 +90,7 @@ int	do_exit(t_cmd *head)
 	{
 		if (previous_cmd(head) == 0 && !(head->next_cmd))
 			ft_putstr_fd("exit\n", 1);
-		ft_putstr_fd("Minishell: exit: too many arguments\n", 1);
+		ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
 		return (2);
 	}
 	else

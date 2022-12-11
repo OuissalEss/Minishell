@@ -6,7 +6,7 @@
 /*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:23:36 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/10 07:40:35 by slaajour         ###   ########.fr       */
+/*   Updated: 2022/12/11 02:23:13 by slaajour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ int	do_export(t_cmd *cmd)
 			creat_or_change(cmd->arguments[i]);
 		else
 		{
-			ft_putstr_fd("Minishell: export: `", cmd->outfile);
-			ft_putstr_fd(cmd->arguments[i], cmd->outfile);
-			ft_putstr_fd("`: not a valid identifier\n", cmd->outfile);
+			ft_putstr_fd("Minishell: export: `", 2);
+			ft_putstr_fd(cmd->arguments[i], 2);
+			ft_putstr_fd("`: not a valid identifier\n", 2);
 			return (1);
 		}
 		i++;

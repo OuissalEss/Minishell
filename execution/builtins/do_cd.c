@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 18:37:35 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/10 06:06:40 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/11 02:21:21 by slaajour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,12 @@ void	update_pwd(char *old_pwd, char *pwd)
 		if (ft_strcmp("OLDPWD", g_data->env->var))
 			g_data->env->value = old_pwd;
 		if (ft_strcmp("PWD", g_data->env->var))
-			g_data->env->value = pwd;
+		{
+			if (pwd != NULL)
+				g_data->env->value = pwd;
+			else
+				ft_putstr_fd("Minishell: cd: No such file or directory\n", 2);
+		}
 		g_data->env = g_data->env->next_var;
 	}
 	g_data->env = head;
@@ -64,9 +69,9 @@ int	do_cd(t_cmd *cmd)
 	}
 	else
 	{
-		ft_putstr_fd("Minishell: cd: ", cmd->outfile);
-		ft_putstr_fd(cmd->arguments[1], cmd->outfile);
-		ft_putstr_fd(": No such file or directory\n", cmd->outfile);
+		ft_putstr_fd("Minishell: cd: ", 2);
+		ft_putstr_fd(cmd->arguments[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (1);
 	}
 	return (0);

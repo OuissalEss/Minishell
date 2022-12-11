@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oessamdi <oessamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slaajour <slaajour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:24:42 by slaajour          #+#    #+#             */
-/*   Updated: 2022/12/10 06:06:21 by oessamdi         ###   ########.fr       */
+/*   Updated: 2022/12/11 02:22:28 by slaajour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ int	do_unset(t_cmd *cmd)
 				remove_node(cmd->arguments[i]);
 			else
 			{
-				ft_putstr_fd("Minishell: unset: `", cmd->outfile);
-				ft_putstr_fd(cmd->arguments[i], cmd->outfile);
-				ft_putstr_fd("`: not a valid identifier\n", cmd->outfile);
+				ft_putstr_fd("Minishell: unset: `", 2);
+				ft_putstr_fd(cmd->arguments[i], 2);
+				ft_putstr_fd("`: not a valid identifier\n", 2);
 				return (1);
 			}
 			i++;
